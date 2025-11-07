@@ -1,143 +1,150 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shubham Raj Sharma — QA Portfolio (Black & Gold)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shubham Raj Sharma | QA Portfolio</title>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- AOS + GSAP -->
+  <!-- AOS Animation -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- EmailJS (optional: replace keys) -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
+    /* --- Theme: Black & Gold, based on Priyanshi layout --- */
     :root{
-      --bg-1: #030305;
-      --bg-2: #07080a;
-      --muted: #bfcbd3;
-      --gold: #ffd48a;
-      --gold-2: #f7e6b8;
-      --card: rgba(255,255,255,0.03);
-      --glass: rgba(255,255,255,0.02);
+      --bg1:#050507;
+      --bg2:#0a0b0d;
+      --muted:#c7cfd6;
+      --gold:#ffd48a;
+      --gold-2:#f7e6b8;
+      --accent:#fff7e6;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#ecf9f6;font-family:Outfit,system-ui,Segoe UI,Roboto,Arial;scroll-behavior:smooth}
+    html,body{height:100%;font-family:'Outfit',system-ui,-apple-system,Segoe UI,Roboto,Arial; background:radial-gradient(circle at 10% 10%, rgba(255,212,138,0.03), transparent), linear-gradient(180deg,var(--bg1),var(--bg2)); color:#fff; -webkit-font-smoothing:antialiased;}
     a{color:inherit}
-    /* Background area (particles + aurora) */
-    .bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-    canvas#bg{position:absolute;inset:0;width:100%;height:100%;display:block}
-    .bg-overlay{position:absolute;inset:0;background-image:radial-gradient(circle at 12% 18%, rgba(255,212,138,0.03), transparent 12%), radial-gradient(circle at 80% 24%, rgba(255,240,210,0.02), transparent 12%);opacity:0.9}
+    html{scroll-behavior:smooth}
 
-    /* container */
-    .site{position:relative;z-index:2;max-width:1150px;margin:28px auto;padding:26px}
-    header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+    /* ----- Background visuals (particles + aurora) ----- */
+    body::before{
+      content:"";position:fixed;inset:0;z-index:0;background:
+        radial-gradient(circle at 20% 20%, rgba(255,212,138,0.03), transparent 12%),
+        radial-gradient(circle at 80% 30%, rgba(255,245,220,0.02), transparent 12%);
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+    canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;display:block}
+
+    /* ----- Layout ----- */
+    .container{position:relative;z-index:2;max-width:1100px;margin:28px auto;padding:28px}
+    header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px}
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:70px;height:70px;border-radius:12px;background:linear-gradient(180deg,#080808,#050505);display:grid;place-items:center;color:var(--gold);font-family:Orbitron;font-size:20px;border:1px solid rgba(255,212,138,0.06)}
+    .logo-box{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,#070708,#020203);display:grid;place-items:center;color:var(--gold);font-family:Orbitron;font-weight:700;font-size:20px;border:1px solid rgba(255,212,138,0.06)}
     nav{display:flex;gap:12px}
-    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:9px;transition:all .22s}
-    nav a:hover{color:#050505;background:linear-gradient(90deg,var(--gold),var(--gold-2));box-shadow:0 12px 40px rgba(255,212,138,0.08)}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .22s}
+    nav a:hover{color:#070707;background:linear-gradient(90deg,var(--gold),var(--gold-2));box-shadow:0 12px 40px rgba(255,212,138,0.08)}
 
-    /* hero */
-    .hero{display:grid;grid-template-columns:1fr 380px;gap:26px;align-items:center;min-height:76vh}
-    .panel{padding:28px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.012),transparent);border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(6px);position:relative;overflow:hidden}
-    .hero-title{font-family:Orbitron,monospace;color:var(--gold);font-size:40px;margin-bottom:8px;letter-spacing:0.8px}
-    .lead{color:var(--muted);margin-bottom:12px}
-    .pills{display:flex;gap:10px;flex-wrap:wrap}
-    .pill{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,212,138,0.035),rgba(255,255,255,0.01));border:1px solid rgba(255,212,138,0.04);color:var(--gold);font-weight:700}
+    /* ----- Loader ----- */
+    #loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:9999;background:linear-gradient(180deg,rgba(0,0,0,0.98),rgba(0,0,0,0.98))}
+    .loader-card{padding:26px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);text-align:center}
+    .loader-logo{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;letter-spacing:6px;margin-bottom:6px}
+    .loader-sub{color:var(--muted)}
 
-    .cta{display:flex;gap:12px;margin-top:18px}
-    .btn{padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#071018;box-shadow:0 18px 50px rgba(255,212,138,0.12);transition:transform .18s}
+    /* ----- Hero (Priyanshi structure adapted) ----- */
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:26px;align-items:center;min-height:74vh}
+    .hero-left{padding:28px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,0.012),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
+    .hero-left h1{font-family:Orbitron,monospace;color:var(--gold);font-size:40px;margin-bottom:8px}
+    .hero-left p.lead{color:var(--muted);margin-top:6px}
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .badge{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,212,138,0.03),transparent);border:1px solid rgba(255,212,138,0.04);color:var(--gold);font-weight:700}
+
+    .hero-cta{display:flex;gap:12px;margin-top:20px}
+    .btn{padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#071018;box-shadow:0 14px 40px rgba(255,212,138,0.12);transition:transform .18s}
     .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
 
-    /* profile */
-    .profile{display:flex;flex-direction:column;align-items:center;gap:12px}
-    .avatar{width:100%;height:420px;border-radius:12px;object-fit:cover;border:5px solid rgba(255,212,138,0.05);box-shadow:0 30px 90px rgba(0,0,0,0.7);transform-origin:center;transition:transform .6s}
-    .meta{display:flex;justify-content:space-between;width:100%;color:var(--muted);font-size:13px}
+    /* ----- Profile card ----- */
+    .profile{border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);text-align:center}
+    .pf{width:100%;height:420px;object-fit:cover;border-radius:10px;border:4px solid rgba(255,212,138,0.06);box-shadow:0 30px 60px rgba(0,0,0,0.6);transition:transform .6s}
+    .meta{width:100%;display:flex;justify-content:space-between;padding:12px 6px;color:var(--muted);font-size:13px}
 
-    /* scanner box (animated little loader) */
-    .scanner{position:absolute;left:18px;bottom:18px;padding:10px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);display:flex;gap:10px;align-items:center}
-    .scanner .bar{width:160px;height:8px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
-    .scanner .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2));box-shadow:0 6px 18px rgba(255,212,138,0.08);transition:width 1.8s}
-
-    /* sections & cards */
-    section{margin-top:36px}
-    .sec-title{font-family:Orbitron,monospace;color:var(--gold);font-size:20px;margin-bottom:14px}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-    .card{position:relative;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.012),transparent);border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
-    .card h3{color:#fff6df;margin-bottom:8px}
-    .card p{color:var(--muted);line-height:1.6}
+    /* ----- Sections (Priyanshi cards, shimmer, hover) ----- */
+    section{padding:48px 0}
+    h2.section-title{font-family:Orbitron,monospace;color:var(--gold);font-size:26px;text-align:center;margin-bottom:26px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+    .card{background:rgba(255,255,255,0.03);border-radius:18px;padding:28px;border:1px solid rgba(255,255,255,0.04);position:relative;overflow:hidden;backdrop-filter:blur(8px);transition:transform .32s, box-shadow .32s}
     .card .shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,245,220,0.06),transparent);transform:translateX(-130%);pointer-events:none}
-    .card:hover{transform:translateY(-8px);box-shadow:0 40px 120px rgba(255,212,138,0.06)}
-    .card:hover .shimmer{transform:translateX(130%);transition:transform .95s cubic-bezier(.2,.9,.2,1)}
+    .card:hover{transform:translateY(-12px);box-shadow:0 40px 120px rgba(255,212,138,0.06)}
+    .card:hover .shimmer{transform:translateX(130%);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+
+    /* list & headings */
+    .card h3{color:var(--gold);margin-bottom:10px}
+    .card ul{list-style:none;color:var(--muted);line-height:1.8}
 
     /* skills bars */
-    .skill{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .skill strong{width:160px;color:#cff8ec}
-    .barWrap{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
-    .barWrap i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 30px rgba(255,212,138,0.08);transition:width 1.6s}
+    .skill{display:flex;align-items:center;gap:12px;margin-top:12px}
+    .skill strong{width:170px;color:#cff8ec}
+    .bar{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 30px rgba(255,212,138,0.08);transition:width 1.6s}
 
-    /* project cards with icon */
-    .projGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .proj{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
-    .proj .icon{position:absolute;right:12px;top:12px;width:58px;height:58px;border-radius:12px;display:grid;place-items:center;background:rgba(0,0,0,0.38);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    /* projects: small icon with bug->check micro animation */
+    .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .proj{padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
+    .proj .icon{position:absolute;right:12px;top:12px;width:58px;height:58px;border-radius:12px;display:grid;place-items:center;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
     .proj svg{width:34px;height:34px}
 
-    /* timeline */
-    .timeline{position:relative;padding-left:18px}
-    .timeline:before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--gold),transparent)}
-    .tl-item{position:relative;padding:14px 12px 14px 28px;border-radius:10px}
-    .tl-item .dot{position:absolute;left:-6px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(255,212,138,0.12)}
-
     /* contact */
-    .contactWrap{display:flex;gap:18px;align-items:flex-start}
-    .contactForm{flex:1;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-    .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none}
-    .input:focus,textarea:focus{box-shadow:0 0 20px rgba(255,212,138,0.12);border-color:rgba(255,212,138,0.18)}
+    .contact-wrap{display:flex;gap:18px;align-items:flex-start}
+    .contact-form{flex:1;background:rgba(0,0,0,0.45);padding:20px;border-radius:12px;border:1px solid rgba(255,215,102,0.04)}
+    .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none;transition:box-shadow .25s,border-color .25s}
+    .input:focus,textarea:focus{box-shadow:0 0 22px rgba(255,212,138,0.12);border-color:rgba(255,212,138,0.18)}
 
     /* cursor aura */
-    .cursor{position:fixed;left:0;top:0;width:200px;height:200px;border-radius:50%;pointer-events:none;z-index:4;mix-blend-mode:screen;background:radial-gradient(circle, rgba(255,245,220,0.12), rgba(255,212,138,0.04) 30%, transparent 60%);transform:translate(-50%,-50%);opacity:0;transition:opacity .12s}
+    .cursor-aura{position:fixed;left:0;top:0;width:200px;height:200px;border-radius:50%;pointer-events:none;z-index:5;background:radial-gradient(circle, rgba(255,245,220,0.12), rgba(255,212,138,0.03) 30%, transparent 60%);mix-blend-mode:screen;transform:translate(-50%,-50%);opacity:0;transition:opacity .12s}
 
-    footer{text-align:center;margin-top:34px;color:var(--muted);padding:18px}
+    footer{text-align:center;margin-top:28px;color:var(--muted);padding:12px}
 
     @media (max-width:980px){
-      .hero{grid-template-columns:1fr;gap:18px}
       .grid{grid-template-columns:1fr}
-      .projGrid{grid-template-columns:1fr}
-      .contactWrap{flex-direction:column}
-      .avatar{height:320px}
+      .proj-grid{grid-template-columns:1fr}
+      .hero{grid-template-columns:1fr;gap:20px}
+      .pf{height:320px}
+      .contact-wrap{flex-direction:column}
     }
   </style>
 </head>
 <body>
-
-  <!-- background -->
-  <div class="bg-wrap" aria-hidden>
-    <canvas id="bg"></canvas>
-    <div class="bg-overlay"></div>
-  </div>
+  <!-- background canvas -->
+  <canvas id="bgCanvas"></canvas>
 
   <!-- loader -->
-  <div id="loader" style="position:fixed;inset:0;display:grid;place-items:center;z-index:9999;background:linear-gradient(180deg,rgba(0,0,0,0.98),rgba(0,0,0,0.98));">
-    <div style="text-align:center;padding:24px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
-      <div style="font-family:Orbitron,monospace;font-size:46px;color:var(--gold);letter-spacing:6px;margin-bottom:8px">SR</div>
-      <div style="color:var(--muted)">Shubham Raj Sharma • Quality Analyst</div>
+  <div id="loader">
+    <div class="loader-card">
+      <div class="loader-logo">SR</div>
+      <div class="loader-sub">Shubham Raj Sharma — Quality Analyst</div>
     </div>
   </div>
 
-  <div class="cursor" id="cursor"></div>
+  <!-- cursor aura -->
+  <div class="cursor-aura" id="cursorAura"></div>
 
-  <div class="site">
+  <div class="container">
     <header>
       <div class="brand">
-        <div class="logo">SR</div>
+        <div class="logo-box">SR</div>
         <div>
           <div style="font-weight:700">Shubham Raj Sharma</div>
           <div style="font-size:13px;color:var(--muted)">Quality Analyst • Manual & Automation</div>
         </div>
       </div>
+
       <nav>
         <a href="#skills">Skills</a>
         <a href="#experience">Experience</a>
@@ -149,22 +156,23 @@
     <main>
       <!-- HERO -->
       <section class="hero" id="hero">
-        <div class="panel" data-aos="fade-up">
-          <div class="hero-title">Shubham Raj Sharma</div>
-          <div class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</div>
+        <div class="hero-left panel" data-aos="fade-up">
+          <h1>Shubham Raj Sharma</h1>
+          <p class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</p>
 
-          <div class="pills" style="margin-top:14px">
-            <div class="pill">Manual Testing</div>
-            <div class="pill">Automation (Selenium)</div>
-            <div class="pill">API Testing (Postman)</div>
-            <div class="pill">Mobile QA</div>
+          <div class="badges" aria-hidden>
+            <div class="badge">Manual Testing</div>
+            <div class="badge">Automation (Selenium)</div>
+            <div class="badge">API Testing (Postman)</div>
+            <div class="badge">Mobile QA</div>
           </div>
 
-          <div class="cta">
+          <div class="hero-cta">
             <button class="btn" id="hireBtn">Hire Me</button>
             <button class="btn secondary" id="cvBtn">Download CV</button>
           </div>
 
+          <!-- small live scanner (animated bar) -->
           <div class="scanner" aria-hidden>
             <div style="font-size:13px;color:var(--muted);margin-right:8px">Analyzer</div>
             <div class="bar"><i style="width:64%"></i></div>
@@ -172,8 +180,7 @@
         </div>
 
         <aside class="profile panel" data-aos="fade-left">
-          <img id="avatar" class="avatar" src="shubham.jpg" alt="Shubham Raj Sharma"
-               onerror="this.src='https://via.placeholder.com/900x600/0b0b0b/ffd48a?text=Shubham+Raj+Sharma'">
+          <img id="pfImg" class="pf" src="shubham.jpg" alt="Shubham Raj Sharma" onerror="this.src='https://via.placeholder.com/900x600/0b0b0b/ffd48a?text=Shubham+Raj+Sharma'">
           <div class="meta">
             <div>
               <div style="font-weight:700">Shubham Raj Sharma</div>
@@ -190,37 +197,46 @@
 
       <!-- SKILLS -->
       <section id="skills">
-        <div class="sec-title" data-aos="fade-up">Skills & Tools</div>
+        <h2 class="section-title">Skills</h2>
         <div class="grid">
           <div class="card" data-aos="zoom-in">
             <div class="shimmer"></div>
-            <h3>Core QA</h3>
-            <p>Manual testing, test-case design, defect lifecycle, regression testing, exploratory testing and usability checks.</p>
-            <div style="margin-top:12px">
-              <div class="skill"><strong>Manual Testing</strong><div class="barWrap"><i style="width:96%"></i></div></div>
-              <div class="skill"><strong>Selenium & TestNG</strong><div class="barWrap"><i style="width:86%"></i></div></div>
-              <div class="skill"><strong>API Testing (Postman)</strong><div class="barWrap"><i style="width:90%"></i></div></div>
-              <div class="skill"><strong>JIRA / Bug Tracking</strong><div class="barWrap"><i style="width:88%"></i></div></div>
+            <h3>Testing & QA</h3>
+            <ul>
+              <li>Manual Testing, Test Case Design</li>
+              <li>Automation — Selenium, TestNG</li>
+              <li>API Testing — Postman</li>
+              <li>Defect Tracking (JIRA)</li>
+            </ul>
+
+            <div style="margin-top:14px">
+              <div class="skill"><strong>Manual Testing</strong><div class="bar"><i style="width:96%"></i></div></div>
+              <div class="skill"><strong>Selenium</strong><div class="bar"><i style="width:86%"></i></div></div>
+              <div class="skill"><strong>Postman & API</strong><div class="bar"><i style="width:90%"></i></div></div>
             </div>
           </div>
 
-          <div class="card" data-aos="zoom-in" data-aos-delay="150">
+          <div class="card" data-aos="zoom-in" data-aos-delay="100">
             <div class="shimmer"></div>
             <h3>Tools & Platforms</h3>
-            <p>JIRA, Bugzilla, ClickUp, Postman, SQL validation, Android & iOS testing, cross-browser verification, CI pipelines.</p>
+            <ul>
+              <li>JIRA, Bugzilla, ClickUp</li>
+              <li>SQL validations & CI workflows</li>
+              <li>Android & iOS testing, Cross-browser</li>
+            </ul>
           </div>
         </div>
       </section>
 
       <!-- EXPERIENCE -->
       <section id="experience">
-        <div class="sec-title" data-aos="fade-up">Experience</div>
+        <h2 class="section-title">Experience</h2>
         <div class="grid">
           <div class="card" data-aos="fade-right">
             <div class="shimmer"></div>
             <h3>Eoxysit Solution LLP — Quality Analyst</h3>
             <p><em>Oct 2023 — Present</em></p>
-            <p>Executed manual and automation testing across Android, iOS & web; wrote test plans; reported defects and automated regression suites using Selenium & TestNG; API validation via Postman and SQL checks.</p>
+            <p>Manual & automation testing across Android, iOS & web; test plans, defect reporting, regression suites with Selenium & TestNG; API validation using Postman; SQL checks.</p>
           </div>
 
           <div class="card timeline" data-aos="fade-left">
@@ -235,9 +251,9 @@
 
       <!-- PROJECTS -->
       <section id="projects">
-        <div class="sec-title" data-aos="fade-up">Projects</div>
-        <div class="projGrid">
-          <!-- OpenStatus -->
+        <h2 class="section-title">Projects</h2>
+        <div class="proj-grid">
+          <!-- Repeated project cards with bug->check icons -->
           <div class="proj" data-aos="zoom-in">
             <div class="shimmer"></div>
             <h3>OpenStatus</h3>
@@ -258,65 +274,38 @@
             </div>
           </div>
 
-          <!-- EndorseList -->
-          <div class="proj" data-aos="zoom-in" data-aos-delay="100">
+          <div class="proj" data-aos="zoom-in" data-aos-delay="80">
             <div class="shimmer"></div>
             <h3>EndorseList</h3>
             <p>Tested endorsements, UI consistency and performance across devices.</p>
             <div class="icon" title="Verify">
               <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <ellipse cx="32" cy="34" rx="10" ry="8"/>
-                  <path d="M20 30c-4-6-2-10 4-12"/>
-                  <path d="M44 30c4-6 2-10-4-12"/>
-                  <path d="M26 26v-6"/>
-                  <path d="M38 26v-6"/>
-                </g>
-                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0">
-                  <path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/>
-                </g>
+                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6"><ellipse cx="32" cy="34" rx="10" ry="8"/><path d="M20 30c-4-6-2-10 4-12"/><path d="M44 30c4-6 2-10-4-12"/><path d="M26 26v-6"/><path d="M38 26v-6"/></g>
+                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" opacity="0"><path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g>
               </svg>
             </div>
           </div>
 
-          <!-- SeekRoomie -->
-          <div class="proj" data-aos="zoom-in" data-aos-delay="200">
+          <div class="proj" data-aos="zoom-in" data-aos-delay="160">
             <div class="shimmer"></div>
             <h3>SeekRoomie</h3>
             <p>Validated matching logic, chat flows and cross-platform reliability.</p>
             <div class="icon" title="Verify">
               <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <ellipse cx="32" cy="34" rx="10" ry="8"/>
-                  <path d="M20 30c-4-6-2-10 4-12"/>
-                  <path d="M44 30c4-6 2-10-4-12"/>
-                  <path d="M26 26v-6"/>
-                  <path d="M38 26v-6"/>
-                </g>
-                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0">
-                  <path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/>
-                </g>
+                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6"><ellipse cx="32" cy="34" rx="10" ry="8"/><path d="M20 30c-4-6-2-10 4-12"/><path d="M44 30c4-6 2-10-4-12"/><path d="M26 26v-6"/><path d="M38 26v-6"/></g>
+                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" opacity="0"><path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g>
               </svg>
             </div>
           </div>
 
-          <!-- Taropy -->
-          <div class="proj" data-aos="zoom-in" data-aos-delay="300">
+          <div class="proj" data-aos="zoom-in" data-aos-delay="240">
             <div class="shimmer"></div>
             <h3>Taropy</h3>
             <p>Usability testing and bug triage for card draws, daily readings and UI interactions.</p>
             <div class="icon" title="Verify">
               <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <ellipse cx="32" cy="34" rx="10" ry="8"/>
-                  <path d="M20 30c-4-6-2-10 4-12"/>
-                  <path d="M44 30c4-6 2-10-4-12"/>
-                  <path d="M26 26v-6"/>
-                  <path d="M38 26v-6"/>
-                </g>
-                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0">
-                  <path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/>
-                </g>
+                <g id="bug" fill="none" stroke="#fff" stroke-width="1.6"><ellipse cx="32" cy="34" rx="10" ry="8"/><path d="M20 30c-4-6-2-10 4-12"/><path d="M44 30c4-6 2-10-4-12"/><path d="M26 26v-6"/><path d="M38 26v-6"/></g>
+                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" opacity="0"><path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g>
               </svg>
             </div>
           </div>
@@ -325,14 +314,14 @@
 
       <!-- CONTACT -->
       <section id="contact">
-        <div class="sec-title" data-aos="fade-up">Hire Me</div>
-        <div class="contactWrap">
-          <form class="contactForm" id="contactForm" data-aos="zoom-in">
-            <input class="input" id="name" placeholder="Your name" required>
-            <input class="input" id="email" type="email" placeholder="Your email" required>
+        <h2 class="section-title">Contact</h2>
+        <div class="contact-wrap">
+          <form class="contact-form" id="contact-form" data-aos="zoom-in">
+            <input class="input" id="name" placeholder="Your Name" required>
+            <input class="input" id="email" type="email" placeholder="Your Email" required>
             <input class="input" id="subject" placeholder="Subject" required>
             <textarea class="input" id="message" rows="6" placeholder="Message" required></textarea>
-            <button class="btn" type="submit">Send Message</button>
+            <button type="submit" class="btn">Send Message</button>
           </form>
 
           <aside class="panel" style="width:320px;text-align:center" data-aos="fade-left">
@@ -347,199 +336,156 @@
     </main>
   </div>
 
-  <!-- AOS -->
+  <!-- AOS script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- EmailJS (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
   <script>
-    /* ---------------------------
-       Background: particles + aurora
-       --------------------------- */
-    const canvas = document.getElementById('bg');
+    /* -------------------------
+       Background canvas (particles + aurora)
+       ------------------------- */
+    const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
-    let W = canvas.width = innerWidth;
-    let H = canvas.height = innerHeight;
+    let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
     window.addEventListener('resize', ()=>{ W = canvas.width = innerWidth; H = canvas.height = innerHeight; initBg(); });
 
     let parts = [], streaks = [];
     function initBg(){
       parts = []; streaks = [];
-      const pcount = Math.max(80, Math.floor((W*H)/90000));
+      const pcount = Math.max(70, Math.floor((W*H)/90000));
       for(let i=0;i<pcount;i++){
-        parts.push({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.7+0.5, vx:(Math.random()-0.5)*0.25, vy:Math.random()*0.28+0.02, a:0.03+Math.random()*0.28 });
+        parts.push({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.6+0.4, vx:(Math.random()-0.5)*0.2, vy:Math.random()*0.3+0.02, a:0.03+Math.random()*0.28 });
       }
       for(let s=0;s<5;s++){
-        streaks.push({ x:Math.random()*W, y:Math.random()*H, w:300+Math.random()*700, h:60+Math.random()*120, spd:0.06+Math.random()*0.35, a:0.02+Math.random()*0.06, tilt:-0.18+(Math.random()*0.36) });
+        streaks.push({ x:Math.random()*W, y:Math.random()*H, w:300+Math.random()*700, h:60+Math.random()*120, spd:0.06+Math.random()*0.35, a:0.02+Math.random()*0.06, tilt:-0.18+(Math.random()*0.36)});
       }
     }
     initBg();
 
-    function drawBg(){
+    function draw(){
       ctx.clearRect(0,0,W,H);
-      // base
+      // base gradient
       const g = ctx.createLinearGradient(0,0,0,H);
-      g.addColorStop(0,'rgba(6,6,8,0.95)'); g.addColorStop(1,'rgba(3,4,6,0.98)');
+      g.addColorStop(0,'rgba(6,6,8,0.96)'); g.addColorStop(1,'rgba(2,3,4,0.99)');
       ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
 
-      // streaks (aurora)
+      // streaks
       for(let s of streaks){
-        s.x += s.spd; if(s.x>W+800) s.x = -1200;
+        s.x += s.spd; if(s.x > W + 800) s.x = -1200;
         const lg = ctx.createLinearGradient(s.x, s.y, s.x+s.w, s.y);
-        lg.addColorStop(0, `rgba(255,212,138,${s.a})`); lg.addColorStop(0.5, `rgba(255,245,220,${s.a*0.95})`); lg.addColorStop(1, `rgba(255,212,138,${s.a})`);
-        ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.tilt); ctx.fillStyle=lg; ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h); ctx.restore();
+        lg.addColorStop(0, `rgba(255,212,138,${s.a})`);
+        lg.addColorStop(0.5, `rgba(255,245,220,${s.a*0.95})`);
+        lg.addColorStop(1, `rgba(255,212,138,${s.a})`);
+        ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.tilt); ctx.fillStyle = lg; ctx.fillRect(-s.w/2, -s.h/2, s.w, s.h); ctx.restore();
       }
 
       // particles
       for(let p of parts){
         p.x += p.vx; p.y -= p.vy;
-        if(p.x<-10) p.x = W+10; if(p.x>W+10) p.x=-10;
-        if(p.y<-10) p.y = H+10; if(p.y>H+10) p.y=-10;
+        if(p.x < -10) p.x = W + 10; if(p.x > W + 10) p.x = -10;
+        if(p.y < -10) p.y = H + 10; if(p.y > H + 10) p.y = -10;
         ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.a})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
       }
-      requestAnimationFrame(drawBg);
+      requestAnimationFrame(draw);
     }
-    drawBg();
+    draw();
 
-    /* ---------------------------
-       Cursor aura
-       --------------------------- */
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e=>{
-      cursor.style.opacity = 1;
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-    document.addEventListener('mouseleave', ()=> cursor.style.opacity = 0);
+    /* -------------------------
+       Cursor aura follow
+       ------------------------- */
+    const aura = document.getElementById('cursorAura');
+    document.addEventListener('mousemove', (e)=>{ aura.style.opacity=1; aura.style.left = e.clientX + 'px'; aura.style.top = e.clientY + 'px'; });
+    document.addEventListener('mouseleave', ()=>{ aura.style.opacity=0; });
 
-    /* ---------------------------
-       Typewriter-like micro effect (on pills)
-       --------------------------- */
-    // (small animated text effect can be added if needed)
+    /* -------------------------
+       AOS init & GSAP: loader + animations
+       ------------------------- */
+    AOS && AOS.init && AOS.init({ duration: 1000, once: true, easing: 'ease-out-cubic' });
 
-    /* ---------------------------
-       GSAP & AOS init: loader & reveals
-       --------------------------- */
     function initAnimations(){
       if(typeof gsap === 'undefined'){ document.getElementById('loader').style.display='none'; return; }
       gsap.registerPlugin(ScrollTrigger);
 
-      // loader hide animation
-      gsap.to('#loader',{opacity:0,duration:0.8,delay:0.9,onComplete:()=>{ document.getElementById('loader').style.display='none'; }});
+      // hide loader
+      gsap.to('#loader',{opacity:0,duration:0.8,delay:0.8,onComplete:()=>{ document.getElementById('loader').style.display='none'; }});
 
       // entrance
-      gsap.from('.logo',{y:-20,opacity:0,duration:0.7,delay:1});
-      gsap.from('.panel',{y:30,opacity:0,duration:0.9,stagger:0.06,delay:1.1});
-      gsap.to('.pill',{y:-8,repeat:-1,yoyo:true,duration:2.4,stagger:0.12,delay:1.6});
+      gsap.from('.logo-box',{y:-16,opacity:0,duration:0.8,delay:1});
+      gsap.from('.panel',{y:26,opacity:0,duration:1,stagger:0.06,delay:1.1});
+      gsap.to('.badge',{y:-8,repeat:-1,yoyo:true,duration:2.4,stagger:0.12,delay:1.6});
 
-      // cards reveal via scroll
+      // reveal cards on scroll
       gsap.utils.toArray('.card, .proj').forEach((el,i)=>{
-        gsap.from(el,{opacity:0,y:28,duration:0.9,delay:0.6 + i*0.06,ease:'power3.out',scrollTrigger:{trigger:el, start:'top 92%'}});
+        gsap.from(el,{opacity:0,y:28,duration:0.9,delay:0.6 + i*0.04,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 92%'}});
       });
 
-      // skill bars animate when visible
-      document.querySelectorAll('.barWrap i').forEach(iEl=>{
-        const w = iEl.style.width || '70%';
-        iEl.style.width = '0%';
-        ScrollTrigger.create({trigger:iEl, start:'top 92%', onEnter:()=> gsap.to(iEl,{width:w,duration:1.6,ease:'power3.out'})});
+      // skill bars animate
+      document.querySelectorAll('.bar > i').forEach(el=>{
+        const w = el.style.width || '70%';
+        el.style.width = '0%';
+        ScrollTrigger.create({trigger:el, start:'top 92%', onEnter:()=> gsap.to(el,{width:w,duration:1.6,ease:'power3.out'})});
       });
 
       // profile parallax
       const profile = document.querySelector('.profile');
-      const avatar = document.getElementById('avatar');
-      if(profile && avatar){
+      const pfImg = document.getElementById('pfImg');
+      if(profile && pfImg){
         profile.addEventListener('mousemove', (e)=>{
-          const r = profile.getBoundingClientRect();
-          const dx = (e.clientX - r.left - r.width/2) / 28;
-          const dy = (e.clientY - r.top - r.height/2) / 28;
-          gsap.to(avatar,{x:dx,y:dy,duration:0.6,ease:'power3.out'});
+          const r = profile.getBoundingClientRect(); const dx = (e.clientX - r.left - r.width/2)/28; const dy = (e.clientY - r.top - r.height/2)/28;
+          gsap.to(pfImg,{x:dx,y:dy,duration:0.6,ease:'power3.out'});
         });
-        profile.addEventListener('mouseleave', ()=> gsap.to(avatar,{x:0,y:0,duration:0.8}));
+        profile.addEventListener('mouseleave', ()=> gsap.to(pfImg,{x:0,y:0,duration:0.8}));
       }
 
-      // project icons: bug -> check animation
+      // project icon hover: bug->check
       document.querySelectorAll('.proj .icon').forEach(icon=>{
-        const sv = icon.querySelector('svg'), bug = sv.querySelector('#bug'), check = sv.querySelector('#check'), chk = sv.querySelector('#checkPath');
+        const sv = icon.querySelector('svg'), bug = sv.querySelector('#bug'), check = sv.querySelector('#check'), chkPath = sv.querySelector('#checkPath');
         icon.addEventListener('mouseenter', ()=>{
-          gsap.to(bug,{opacity:0,duration:0.26});
+          gsap.to(bug,{opacity:0,duration:0.24});
           gsap.to(check,{opacity:1,duration:0.26});
-          gsap.to(chk,{strokeDashoffset:0,duration:0.7,ease:'power3.out'});
+          gsap.to(chkPath,{strokeDashoffset:0,duration:0.7,ease:'power3.out'});
         });
         icon.addEventListener('mouseleave', ()=>{
-          gsap.to(chk,{strokeDashoffset:100,duration:0.36});
+          gsap.to(chkPath,{strokeDashoffset:100,duration:0.36});
           gsap.to(check,{opacity:0,duration:0.26});
-          gsap.to(bug,{opacity:1,duration:0.26});
+          gsap.to(bug,{opacity:1,duration:0.24});
         });
       });
 
-      // hover lifts on cards
-      document.querySelectorAll('.card').forEach(c=>{
-        c.addEventListener('mouseenter', ()=> gsap.to(c,{y:-10,boxShadow:'0 40px 120px rgba(255,212,138,0.06)',duration:0.32}));
-        c.addEventListener('mouseleave', ()=> gsap.to(c,{y:0,boxShadow:'0 0 0 rgba(0,0,0,0)',duration:0.32}));
-      });
-
-      // smooth nav
+      // nav click smooth scrolling
       document.querySelectorAll('nav a').forEach(a=>{
-        a.addEventListener('click', e=>{
-          e.preventDefault();
-          const id = a.getAttribute('href').slice(1);
-          document.getElementById(id).scrollIntoView({behavior:'smooth'});
-        });
+        a.addEventListener('click', e=>{ e.preventDefault(); const id = a.getAttribute('href').slice(1); document.getElementById(id).scrollIntoView({behavior:'smooth'}); });
       });
 
-      // Hire/CV buttons
-      document.getElementById('hireBtn').addEventListener('click', ()=>{
-        document.getElementById('contact').scrollIntoView({behavior:'smooth'});
-        gsap.from('#contact',{y:18,opacity:0,duration:0.6});
-      });
-      document.getElementById('cvBtn').addEventListener('click', ()=>{
-        // If you have a local file, replace href '#' with file name: 'Shubham_Raj_Sharma_CV.pdf'
-        const a = document.createElement('a'); a.href='#'; a.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(a); a.click(); a.remove();
-        gsap.fromTo('#cvBtn',{scale:1},{scale:1.06,duration:0.12,yoyo:true,repeat:1});
-      });
-    } // initAnimations end
+      // CTA buttons
+      document.getElementById('hireBtn').addEventListener('click', ()=>{ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); gsap.from('#contact',{y:20,opacity:0,duration:0.6}); });
+      document.getElementById('cvBtn').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href='#'; a.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(a); a.click(); a.remove(); gsap.fromTo('#cvBtn',{scale:1},{scale:1.06,duration:0.12,yoyo:true,repeat:1}); });
 
-    /* ---------------------------
-       AOS init & EmailJS wiring
-       --------------------------- */
-    AOS && AOS.init && AOS.init({ duration:1000, once:true, easing:'ease-out-cubic' });
-
-    // loader safety fallback + init animations after small delay
-    window.addEventListener('load', ()=>{
-      setTimeout(()=>{ try{ initAnimations(); }catch(e){ console.warn(e); document.getElementById('loader').style.display='none'; } }, 160);
-      // ensure loader removed after max time
-      setTimeout(()=>{ const loader = document.getElementById('loader'); if(loader) loader.style.display='none'; }, 5000);
-    });
-
-    /* ---------------------------
-       Contact form (EmailJS optional)
-       --------------------------- */
-    (function(){
-      // initialize emailjs if present (replace user ID & template/service IDs with your own)
-      if(window.emailjs){ try{ emailjs.init('5bUKpnL53r4Npm3aR'); } catch(e){} }
-
-      const form = document.getElementById('contactForm');
-      form.addEventListener('submit', function(e){
+      // contact form animation
+      const form = document.getElementById('contact-form');
+      form.addEventListener('submit', (e)=>{
         e.preventDefault();
-        const btn = form.querySelector('button');
-        btn.disabled = true; const original = btn.innerText; btn.innerText = 'Sending...';
-        // If you have EmailJS set up, use it. Otherwise simulate success.
+        const btn = form.querySelector('button'); btn.disabled=true; const orig = btn.innerText; btn.innerText='Sending...';
         if(window.emailjs && emailjs.send){
+          // EmailJS usage: set your service/template IDs
           emailjs.send('service_4uwqhsl','template_nypl0pp',{
             from_name: document.getElementById('name').value,
             from_email: document.getElementById('email').value,
             subject: document.getElementById('subject').value,
             message: document.getElementById('message').value
-          }).then(()=>{ alert('✅ Message Sent!'); form.reset(); btn.innerText = original; btn.disabled=false; }, ()=>{ alert('❌ Send failed — try later.'); btn.innerText = original; btn.disabled=false; });
+          }).then(()=>{ alert('✅ Message Sent'); form.reset(); btn.innerText=orig; btn.disabled=false; }, ()=>{ alert('❌ Send failed'); btn.innerText=orig; btn.disabled=false; });
         } else {
           // simulate send
-          setTimeout(()=>{ alert('✅ Message Sent (simulation) — set up EmailJS or your backend to send real emails.'); form.reset(); btn.innerText = original; btn.disabled=false; }, 900);
+          setTimeout(()=>{ alert('✅ Message (simulated) — set up EmailJS for real send'); form.reset(); btn.innerText=orig; btn.disabled=false; }, 900);
         }
       });
-    })();
+    } // initAnimations
+
+    // AOS init and start GSAP after load
+    AOS && AOS.init && AOS.init({ duration: 1100, once: true });
+    window.addEventListener('load', ()=>{ setTimeout(initAnimations, 160); setTimeout(()=>{ const l = document.getElementById('loader'); if(l) l.style.display='none'; }, 5500); });
+
+    /* Ensure canvas resizes: small helper */
+    window.addEventListener('resize', ()=>{ try{ canvas.width = innerWidth; canvas.height = innerHeight;}catch(e){} });
   </script>
-  <!-- AOS script -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>
