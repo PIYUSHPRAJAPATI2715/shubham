@@ -1,167 +1,522 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Shubham Raj Sharma | QA Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shubham Raj Sharma — QA Portfolio (Black & Gold Universe)</title>
+
+  <!-- Fonts + GSAP -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
-    :root {
-      --gold:#f7d47c;
-      --bg:#050505;
+    :root{
+      --bg:#030303;
       --muted:#cfcfcf;
+      --gold:#f2d88b;            /* light gold */
+      --card:#0b0b0b;
+      --glass: rgba(255,255,255,0.03);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:#fff;font-family:'Poppins',sans-serif;overflow-x:hidden}
-    canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-    #loader{
-      position:fixed;inset:0;background:#000;
-      display:flex;align-items:center;justify-content:center;
-      flex-direction:column;z-index:9999;color:var(--gold);
-      font-family:'Playfair Display',serif;
+    html,body{height:100%;background:var(--bg);color:#fff;font-family:'Poppins',sans-serif;-webkit-font-smoothing:antialiased;}
+    a{color:inherit}
+    /* Canvas background is behind everything */
+    canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    /* Loader (center) */
+    #loader {
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+      background:linear-gradient(0deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
+      z-index:9999;
     }
-    #loader h1{font-size:2rem;letter-spacing:2px;opacity:0}
-    #loader p{opacity:0;color:var(--muted)}
-    header{display:flex;justify-content:space-between;align-items:center;padding:20px 10%;position:relative;z-index:5}
-    header .logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold)}
-    nav a{color:var(--muted);text-decoration:none;margin-left:20px;transition:.3s}
-    nav a:hover{color:var(--gold)}
-    .hero{display:flex;justify-content:space-between;align-items:center;padding:80px 10%;min-height:90vh;position:relative;z-index:5}
-    .hero-text{max-width:50%}
-    h1{font-family:'Playfair Display',serif;color:var(--gold);font-size:2.6rem}
-    p.lead{margin-top:15px;color:var(--muted)}
-    .btn{display:inline-block;margin-top:20px;padding:12px 24px;border:none;
-      border-radius:50px;background:linear-gradient(90deg,var(--gold),#fff3b0);
-      color:#000;font-weight:600;cursor:pointer;transition:.3s}
-    .btn:hover{transform:scale(1.05);box-shadow:0 0 25px rgba(255,220,100,.3)}
-    .pf{width:320px;height:400px;object-fit:cover;border-radius:20px;
-      box-shadow:0 0 60px rgba(255,220,100,.2)}
-    section{padding:80px 10%;position:relative;z-index:5}
-    section h2{color:var(--gold);font-family:'Playfair Display';margin-bottom:30px;font-size:1.8rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-    .card{background:rgba(255,255,255,0.04);border-radius:15px;padding:20px;
-      border:1px solid rgba(255,255,255,0.05);transition:.4s}
-    .card:hover{transform:translateY(-6px);box-shadow:0 0 40px rgba(255,220,100,.15)}
-    .card h3{color:#fff3b0;margin-bottom:10px}
-    .contact{display:flex;gap:20px;flex-wrap:wrap}
-    form{flex:1;min-width:280px}
-    input,textarea{width:100%;background:rgba(0,0,0,.5);
-      border:1px solid rgba(255,220,100,.2);border-radius:10px;color:#fff;
-      padding:10px;margin-bottom:12px;outline:none}
-    input:focus,textarea:focus{box-shadow:0 0 15px rgba(255,220,100,.3)}
-    footer{text-align:center;padding:30px;color:var(--muted);background:#000;border-top:1px solid rgba(255,255,255,.05)}
+    .loader-logo{
+      font-family:'Playfair Display',serif;
+      color:var(--gold);
+      font-size:36px;
+      letter-spacing:2px;
+      margin-bottom:8px;
+      transform-origin:center;
+      filter:drop-shadow(0 6px 18px rgba(242,216,139,0.12));
+      opacity:0;
+    }
+    .loader-sub{color:var(--muted);font-size:13px;opacity:0}
+    /* tiny fallback text */
+    .loader-note{color:rgba(255,255,255,0.06);font-size:11px;margin-top:12px}
+
+    /* Container */
+    .site{max-width:1150px;margin:28px auto;padding:26px;position:relative;z-index:3}
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo-box{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,#0c0c0c,#0a0a0a);display:grid;place-items:center;color:var(--gold);font-weight:700;font-family:'Playfair Display';font-size:20px;border:1px solid rgba(255,215,102,0.06)}
+    nav{display:flex;gap:10px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .24s}
+    nav a:hover{color:#050505;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 40px rgba(242,216,139,0.08)}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:center;min-height:74vh;padding-top:10px}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:30px;border-radius:14px;border:1px solid rgba(255,215,102,0.04);backdrop-filter:blur(6px)}
+    h1.hero-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:40px;line-height:1.02;margin-bottom:6px}
+    p.lead{color:var(--muted);margin-top:8px}
+    .badges{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .badge{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,215,102,0.05));color:var(--gold);font-weight:600;font-size:13px;border:1px solid rgba(255,215,102,0.04)}
+
+    .hero-cta{display:flex;gap:12px;margin-top:22px}
+    .btn{
+      padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:700;
+      background:linear-gradient(90deg,var(--gold),#fff2bd);
+      color:#020202;box-shadow:0 16px 40px rgba(242,216,139,0.12);transition:transform .22s,box-shadow .22s;
+    }
+    .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+
+    /* Profile card */
+    .profile{border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);display:flex;flex-direction:column;align-items:center}
+    .pf{width:100%;height:460px;object-fit:cover;border-radius:10px;border:4px solid rgba(255,215,102,0.06);box-shadow:0 30px 60px rgba(0,0,0,0.7);transition:transform .6s}
+    .meta{width:100%;display:flex;justify-content:space-between;padding:10px 6px}
+    .meta .small{color:var(--muted);font-size:13px}
+
+    /* Section */
+    section{margin-top:40px}
+    .sec-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:22px;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+
+    .card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
+    .card h3{color:#fff6df;margin-bottom:8px;}
+    .card p{color:var(--muted);line-height:1.6}
+
+    /* shimmer strip */
+    .card .shimmer{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,245,200,0.08),transparent);transform:translateX(-120%);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+    .card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(242,216,139,0.06)} 
+    .card:hover .shimmer{transform:translateX(120%)}
+
+    /* contact */
+    .contact-wrap{display:flex;gap:18px;align-items:flex-start}
+    .contact-form{flex:1;background:rgba(0,0,0,0.45);padding:20px;border-radius:12px;border:1px solid rgba(255,215,102,0.04)}
+    .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none;transition:box-shadow .25s,border-color .25s}
+    .input:focus,textarea:focus{box-shadow:0 0 22px rgba(242,216,139,0.16);border-color:rgba(255,215,102,0.28)}
+    .cta-panel{width:320px;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,215,102,0.03),transparent);text-align:center}
+
+    /* footer */
+    footer{margin-top:40px;padding:28px;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.03);margin-bottom:24px}
+
+    /* cursor aura */
+    #cursorAura{position:fixed;left:0;top:0;width:200px;height:200px;border-radius:50%;pointer-events:none;z-index:4;background:radial-gradient(circle, rgba(255,245,200,0.12), rgba(242,216,139,0.06) 30%, transparent 50%);mix-blend-mode:screen;transform:translate(-50%,-50%);transition:opacity .18s}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr;gap:20px}
+      .pf{height:360px}
+      .grid{grid-template-columns:1fr}
+      .contact-wrap{flex-direction:column}
+      .cta-panel{width:100%}
+    }
   </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
-  <div id="loader">
-    <h1>Shubham Raj Sharma</h1>
-    <p>Quality Analyst — Manual & Automation</p>
+  <!-- canvas for streaks/particles -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- loader -->
+  <div id="loader" aria-hidden="false">
+    <div class="loader-logo" id="srLogo">Shubham</div>
+    <div class="loader-sub" id="loaderSub">Shubham Raj Sharma — Quality Analyst</div>
+    <div class="loader-note">Preparing the Gold Aurora…</div>
   </div>
 
-  <header>
-    <div class="logo">SR • Portfolio</div>
-    <nav>
-      <a href="#skills">Skills</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Hire Me</a>
-    </nav>
-  </header>
+  <!-- cursor aura -->
+  <div id="cursorAura" style="opacity:0"></div>
 
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Shubham Raj Sharma</h1>
-      <p class="lead">I’m a Quality Analyst passionate about delivering flawless software through manual & automation testing, API validation and user-focused QA strategy.</p>
-      <button class="btn" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">Hire Me</button>
-    </div>
-    <img src="profile.jpg" class="pf" alt="">
-  </section>
-
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="grid">
-      <div class="card"><h3>Testing & QA</h3><p>Manual & Automation Testing (Selenium, TestNG), API testing, regression & functional testing.</p></div>
-      <div class="card"><h3>Tools</h3><p>JIRA, Postman, ClickUp, Bugzilla, Trello, SQL validation.</p></div>
-      <div class="card"><h3>Soft Skills</h3><p>Problem-solving, collaboration, and precise documentation for reliable QA communication.</p></div>
-    </div>
-  </section>
-
-  <section id="experience">
-    <h2>Experience</h2>
-    <div class="grid">
-      <div class="card"><h3>Eoxysit Solution LLP — QA</h3><p>Executed manual and automation testing across Android, iOS & Web. Managed defects, wrote test cases, and validated APIs.</p></div>
-      <div class="card"><h3>Education</h3><p>B.Tech — Arya College (2022–25)<br>Diploma — Govt. Leather Institute (2019–22)</p></div>
-    </div>
-  </section>
-
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="grid">
-      <div class="card"><h3>OpenStatus</h3><p>Functional & performance testing for Android/iOS ensuring consistent UX.</p></div>
-      <div class="card"><h3>SeekRoomie</h3><p>Validated match & chat flow across platforms.</p></div>
-      <div class="card"><h3>Taropy</h3><p>Tested app stability & tarot logic accuracy.</p></div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Hire Me</h2>
-    <div class="contact">
-      <form onsubmit="sendMsg(event)">
-        <input placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="5" placeholder="Message" required></textarea>
-        <button class="btn" type="submit">Send Message</button>
-      </form>
-      <div style="flex:1;min-width:280px;color:var(--muted)">
-        <p><strong>Email:</strong> shubhamrajsharma5@gmail.com</p>
-        <p><strong>Phone:</strong> +91 7033330073</p>
-        <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/shubham-raj-sharma-9a64611b7" style="color:var(--gold)">View Profile</a></p>
+  <div class="site">
+    <header>
+      <div class="brand">
+        <div class="logo-box">SR</div>
+        <div>
+          <div style="font-weight:700">Shubham Raj Sharma</div>
+          <div style="font-size:13px;color:var(--muted)">Quality Analyst • Manual & Automation</div>
+        </div>
       </div>
-    </div>
-  </section>
+      <nav>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Hire Me</a>
+      </nav>
+    </header>
 
-  <footer>© 2025 Shubham Raj Sharma • QA Portfolio</footer>
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero-card">
+          <h1 class="hero-title">Shubham Raj Sharma</h1>
+          <p class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</p>
+
+          <div class="badges" aria-hidden>
+            <div class="badge">Manual Testing</div>
+            <div class="badge">Automation (Selenium)</div>
+            <div class="badge">API Testing</div>
+            <div class="badge">Mobile QA</div>
+          </div>
+
+          <div class="hero-cta">
+            <button class="btn" id="hireBtn">Hire Me</button>
+            <button class="btn secondary" id="cvBtn">Download CV</button>
+          </div>
+        </div>
+
+        <aside class="profile">
+          <img id="pfImg" class="pf" src="profile.jpg" alt="Shubham Raj Sharma">
+          <div class="meta">
+            <div>
+              <div style="font-weight:700">Shubham Raj Sharma</div>
+              <div class="small">Quality Analyst — Eoxysit Solution LLP</div>
+            </div>
+            <div style="text-align:right">
+              <div class="small">📍 Jaipur</div>
+              <div class="small">📧 shubhamrajsharma5@gmail.com</div>
+              <div class="small">📱 +91 7033330073</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="skills">
+        <div class="sec-title">Skills</div>
+        <div class="grid">
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>Testing & QA</h3>
+            <p>Manual & automation testing (Selenium, TestNG). API testing with Postman. Test case design and defect lifecycle management.</p>
+          </div>
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>Tools & Tech</h3>
+            <p>JIRA, Bugzilla, ClickUp, Postman, SQL validation, Android & iOS testing, cross-browser verification.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience">
+        <div class="sec-title">Experience</div>
+        <div class="grid">
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>Eoxysit Solution LLP — Quality Analyst</h3>
+            <p><em>Oct 2023 — Present</em></p>
+            <p>Executed manual and automation testing across Android, iOS & web; wrote test plans; reported defects and automated regression suites.</p>
+          </div>
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>Education</h3>
+            <p><strong>B.Tech — Arya College of Engineering</strong><br>Aug 2022 — Aug 2025 (ongoing)<br><strong>Diploma — Government Leather Institute</strong><br>Aug 2019 — Aug 2022</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <div class="sec-title">Projects</div>
+        <div class="grid">
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>OpenStatus</h3>
+            <p>Functional & performance testing for Android & iOS; identifying cross-device issues and ensuring stability.</p>
+          </div>
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>EndorseList</h3>
+            <p>Tested endorsements and UI consistency; tracked & validated fixes across multiple devices.</p>
+          </div>
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>SeekRoomie</h3>
+            <p>Validated matching flow, chat features, and cross-platform reliability.</p>
+          </div>
+          <div class="card">
+            <div class="shimmer"></div>
+            <h3>Taropy</h3>
+            <p>Validated tarot draw logic and daily reading accuracy; ensured performance and usability.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="sec-title">Hire Me</div>
+        <div class="contact-wrap">
+          <form class="contact-form" id="contactForm">
+            <input class="input" id="name" placeholder="Your name" required>
+            <input class="input" id="email" type="email" placeholder="Your email" required>
+            <input class="input" id="subject" placeholder="Subject" required>
+            <textarea class="input" id="message" rows="6" placeholder="Message" required></textarea>
+            <button class="btn" type="submit">Send Message</button>
+          </form>
+
+          <aside class="cta-panel">
+            <div style="font-weight:700;color:var(--gold)">Fast & detailed QA reports</div>
+            <div style="color:var(--muted);margin-top:10px">Available for freelance & full-time QA, automation scripting and API testing.</div>
+            <div style="margin-top:10px;color:var(--muted)">LinkedIn: <a href="https://www.linkedin.com/in/shubham-raj-sharma-9a64611b7" style="color:var(--gold);text-decoration:none" target="_blank">View profile</a></div>
+          </aside>
+        </div>
+      </section>
+
+      <footer>© 2025 Shubham Raj Sharma — Black & Gold Universe</footer>
+    </main>
+  </div>
 
   <script>
-    // loader animation
-    gsap.to("#loader h1",{opacity:1,y:-10,duration:1});
-    gsap.to("#loader p",{opacity:1,duration:1,delay:.4});
-    setTimeout(()=>{gsap.to("#loader",{opacity:0,duration:1,onComplete:()=>loader.remove()});},1800);
+    // SAFETY: fallback to ensure loader hides if GSAP or network blocked
+    const loader = document.getElementById('loader');
+    let loaderHidden = false;
+    function hideLoaderImmediate(){ if(loaderHidden) return; loaderHidden=true; loader.style.transition='opacity .6s'; loader.style.opacity=0; setTimeout(()=>{ loader.style.display='none'; },700); }
+    // fallback hide after 4.2s (in case GSAP doesn't run)
+    setTimeout(hideLoaderImmediate, 4200);
 
-    // background particles + aurora
-    const c=document.getElementById("bg"),x=c.getContext("2d");
-    let W=c.width=innerWidth,H=c.height=innerHeight;
-    addEventListener("resize",()=>{W=c.width=innerWidth;H=c.height=innerHeight});
-    const P=[];for(let i=0;i<80;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2,a:Math.random()*0.3});
-    function draw(){
-      x.clearRect(0,0,W,H);
-      let grd=x.createLinearGradient(0,0,W,H);
-      grd.addColorStop(0,"rgba(247,212,124,0.05)");
-      grd.addColorStop(1,"rgba(247,212,124,0.15)");
-      x.fillStyle=grd;
-      x.fillRect(0,0,W,H);
-      for(let p of P){p.y-=.3;if(p.y<0)p.y=H;x.beginPath();x.fillStyle=`rgba(247,212,124,${p.a})`;x.arc(p.x,p.y,p.r,0,6.28);x.fill();}
-      requestAnimationFrame(draw);
-    }draw();
+    // Canvas background: white/silver particles + slow aurora streak
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+    window.addEventListener('resize', ()=> { W = canvas.width = innerWidth; H = canvas.height = innerHeight; createParticles(); });
 
-    // scroll animations
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray("section").forEach(sec=>{
-      gsap.from(sec,{opacity:0,y:50,duration:.9,scrollTrigger:{trigger:sec,start:"top 80%"}})
+    // particles config
+    let particles = [];
+    function createParticles(){
+      particles = [];
+      const count = Math.max(60, Math.floor((W*H)/90000));
+      for(let i=0;i<count;i++){
+        particles.push({
+          x: Math.random()*W,
+          y: Math.random()*H,
+          r: Math.random()*1.8 + 0.6,
+          vx: (Math.random()-0.5)*0.25,
+          vy: (Math.random()*0.4)+0.05,
+          a: 0.06 + Math.random()*0.35
+        });
+      }
+    }
+    createParticles();
+
+    // aurora streaks
+    const streaks = [];
+    for(let s=0;s<6;s++){
+      streaks.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        w: 300 + Math.random()*700,
+        h: 60 + Math.random()*140,
+        spd: 0.12 + Math.random()*0.5,
+        alpha: 0.02 + Math.random()*0.06,
+        tilt: -0.18 + (Math.random()*0.36)
+      });
+    }
+
+    function render(){
+      ctx.clearRect(0,0,W,H);
+      // subtle black gradient to give depth
+      const g = ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0, 'rgba(10,10,10,0.9)');
+      g.addColorStop(1, 'rgba(3,3,3,0.98)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
+
+      // streaks (aurora)
+      for(let s of streaks){
+        s.x += s.spd;
+        if(s.x > W + 800) s.x = -1200;
+        const lg = ctx.createLinearGradient(s.x, s.y, s.x+s.w, s.y);
+        lg.addColorStop(0, `rgba(242,216,139,${s.alpha})`);
+        lg.addColorStop(0.5, `rgba(255,245,220,${s.alpha*0.9})`);
+        lg.addColorStop(1, `rgba(242,216,139,${s.alpha})`);
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.tilt);
+        ctx.fillStyle = lg;
+        ctx.fillRect(-s.w/2, -s.h/2, s.w, s.h);
+        ctx.restore();
+      }
+
+      // particles
+      for(let p of particles){
+        p.x += p.vx;
+        p.y -= p.vy;
+        if(p.x < -10) p.x = W + 10;
+        if(p.x > W + 10) p.x = -10;
+        if(p.y < -10) p.y = H + 10;
+        if(p.y > H + 10) p.y = -10;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      requestAnimationFrame(render);
+    }
+    render();
+
+    // Cursor aura
+    const aura = document.getElementById('cursorAura');
+    document.addEventListener('mousemove', (e)=>{
+      aura.style.opacity = 1;
+      aura.style.left = e.clientX + 'px';
+      aura.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mouseleave', ()=>{ aura.style.opacity = 0; });
+
+    // GSAP-driven animations and scroll interactions
+    function initAnimations(){
+      // ensure plugin registered
+      gsap.registerPlugin(ScrollTrigger);
+
+      // loader reveal -> burst particles effect
+      const logo = document.getElementById('srLogo');
+      const sub = document.getElementById('loaderSub');
+
+      // initial loader timeline
+      const tl = gsap.timeline({
+        onComplete: ()=> {
+          // burst tiny canvas particles from center to feel like SR formed then spread
+          burstParticles();
+          gsap.to('#loader',{opacity:0,duration:0.9,delay:0.45,onComplete:()=>{ hideLoaderImmediate(); }});
+        }
+      });
+      tl.to(logo, {opacity:1, y:-6, duration:0.9, ease:'power3.out'});
+      tl.to(sub, {opacity:1, duration:0.6}, "-=0.3");
+      tl.to(logo, {scale:1.05, duration:0.55, repeat:1, yoyo:true, ease:'sine.inOut'}, "+=0.12");
+
+      // entrance animations for header + hero
+      gsap.from('.logo-box', {y:-20, opacity:0, duration:0.8, delay:1.3});
+      gsap.from('.hero-card', {y:30, opacity:0, duration:0.9, delay:1.5});
+      gsap.from('.profile', {y:30, opacity:0, duration:0.9, delay:1.6});
+
+      // hero badges subtle float
+      gsap.to('.badge', {y:-6, repeat:-1, yoyo:true, duration:2.4, stagger:0.16, ease:'sine.inOut', delay:2.2});
+
+      // profile parallax on mouse
+      const pf = document.getElementById('pfImg');
+      const profile = document.querySelector('.profile');
+      profile.addEventListener('mousemove', (e)=>{
+        const r = profile.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width/2) / 30;
+        const dy = (e.clientY - r.top - r.height/2) / 30;
+        gsap.to(pf, {x:dx, y:dy, duration:0.8, ease:'power3.out'});
+      });
+      profile.addEventListener('mouseleave', ()=> gsap.to(pf, {x:0,y:0,duration:0.8,ease:'power3.out'}));
+
+      // scroll-triggered reveals
+      gsap.utils.toArray('section').forEach((sec, i) => {
+        gsap.from(sec, {
+          opacity: 0, y: 50, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: sec, start: 'top 85%' , toggleActions: 'play none none none' },
+          delay: i*0.06
+        });
+      });
+
+      // card hover glows
+      document.querySelectorAll('.card').forEach(c => {
+        c.addEventListener('mouseenter', ()=> {
+          gsap.to(c, {boxShadow: '0 30px 80px rgba(242,216,139,0.12)', y:-8, duration:0.36});
+        });
+        c.addEventListener('mouseleave', ()=> {
+          gsap.to(c, {boxShadow: '0 0 0 rgba(0,0,0,0)', y:0, duration:0.36});
+        });
+      });
+
+      // nav links smooth scrolling
+      document.querySelectorAll('nav a').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          document.getElementById(id).scrollIntoView({behavior:'smooth'});
+        });
+      });
+
+      // Hire & CV buttons
+      document.getElementById('hireBtn').addEventListener('click', ()=> {
+        document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+        gsap.fromTo('#contact', {y:20,opacity:0}, {y:0,opacity:1,duration:0.6});
+      });
+      document.getElementById('cvBtn').addEventListener('click', ()=> {
+        // simulated download - you can point to real file URL
+        const a = document.createElement('a'); a.href='#'; a.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(a); a.click(); a.remove();
+        gsap.fromTo('#cvBtn', {scale:1}, {scale:1.06, duration:0.18, yoyo:true, repeat:1});
+      });
+
+      // contact form send animation
+      const form = document.getElementById('contactForm');
+      form.addEventListener('submit', (e)=> {
+        e.preventDefault();
+        const btn = form.querySelector('button');
+        btn.disabled = true;
+        const original = btn.innerText;
+        btn.innerText = 'Sending...';
+        gsap.to(btn, {scale:0.98, duration:0.12});
+        setTimeout(()=> {
+          btn.innerText = 'Sent ✓';
+          gsap.to(btn, {scale:1.02, duration:0.18});
+          setTimeout(()=>{ btn.disabled=false; btn.innerText=original; form.reset(); }, 1400);
+        }, 900);
+      });
+    } // end initAnimations
+
+    // A small burst particle animation (center) when loader finishes
+    function burstParticles(){
+      const count = 36;
+      const burst = [];
+      for(let i=0;i<count;i++){
+        burst.push({
+          x: window.innerWidth/2 + (Math.random()-0.5)*40,
+          y: window.innerHeight/2 + (Math.random()-0.5)*20,
+          vx: (Math.random()-0.5)*6,
+          vy: (Math.random()-0.8)*6,
+          r: Math.random()*3 + 1,
+          a: 1
+        });
+      }
+      let t = 0;
+      function step(){
+        ctx.save();
+        for(let b of burst){
+          b.x += b.vx; b.y += b.vy; b.vx *= 0.96; b.vy *= 0.98; b.a -= 0.02;
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(242,216,139,${Math.max(b.a,0)})`;
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+        t++;
+        if(t<60) requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    // Wait until GSAP is ready; if not loaded, still run minimal init
+    function safeInit(){
+      try {
+        if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined'){
+          initAnimations();
+        } else {
+          // quick fallback: simple fadeout loader if GSAP missing
+          console.warn('GSAP not available — running fallback animations.');
+          setTimeout(hideLoaderImmediate, 800);
+        }
+      } catch(e){
+        console.error(e);
+        hideLoaderImmediate();
+      }
+    }
+
+    // hide loader after GSAP-based timeline finishes (if GSAP loaded)
+    // call safeInit on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', ()=> {
+      // tiny entrance to show loader logo even before GSAP timeline
+      const logoEl = document.getElementById('srLogo'), sub = document.getElementById('loaderSub');
+      logoEl.style.opacity = 1; logoEl.style.transform = 'translateY(0)';
+      sub.style.opacity = 1;
+      // Give a short delay then initialize GSAP (or fallback)
+      setTimeout(safeInit, 320);
     });
 
-    // form
-    function sendMsg(e){
-      e.preventDefault();
-      const btn=e.target.querySelector("button");
-      btn.textContent="Sent ✓"; gsap.to(btn,{scale:1.1,duration:.3,yoyo:true,repeat:1});
-      setTimeout(()=>btn.textContent="Send Message",1500);
-      e.target.reset();
-    }
+    // Ensure loader hidden if everything fails
+    setTimeout(hideLoaderImmediate, 6000);
+
+    // Prevent the page from staying black if image missing - fallback image
+    document.getElementById('pfImg').addEventListener('error', (e) => {
+      e.target.src = 'https://via.placeholder.com/900x600/0b0b0b/f2d88b?text=Shubham+Raj+Sharma';
+    });
   </script>
 </body>
 </html>
