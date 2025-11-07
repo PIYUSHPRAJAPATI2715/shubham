@@ -6,121 +6,119 @@
   <title>Shubham Raj Sharma — QA Portfolio (Black & Gold)</title>
 
   <!-- Fonts + GSAP -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
-    :root{
-      --bg:#050507; --panel:#0b0b0d; --muted:#c7d3db; --gold:#f4d18a; --accent:#ffdca6;
-      --glass:rgba(255,255,255,0.03);
-      --glass-2:rgba(255,255,255,0.02);
-    }
+    :root{--bg:#050507;--panel:#0b0b0d;--muted:#bfcbd3;--gold:#ffd48a;--accent:#f7e6b8}
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:linear-gradient(180deg,#020204 0%, #071018 60%);color:#eaf6f5;font-family:Poppins,system-ui,Segoe UI,Roboto,Arial;}
+    html,body{height:100%;background:radial-gradient(1200px 600px at 10% 10%, rgba(255,212,138,0.03), transparent), linear-gradient(180deg,#040405,#061018);color:#ecf9f6;font-family:Outfit,system-ui,Segoe UI,Roboto,Arial;}
     a{color:inherit}
 
-    /* ---------- background layers ---------- */
-    canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-    .noise{position:fixed;inset:0;z-index:0;opacity:0.06;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="2"/></filter><rect width="100%" height="100%" filter="url(%23n)" fill="white"/></svg>')}
+    /* Full-screen animated background (particles + aurora + grid) */
+    .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .bg canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+    .grid-lines{position:absolute;inset:0;opacity:0.04;background-image:linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(180deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:120px 120px}
 
-    /* container */
-    .wrap{position:relative;z-index:2;max-width:1200px;margin:36px auto;padding:22px}
-
-    /* loader */
-    #loader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%, rgba(244,209,138,0.06), rgba(0,0,0,0.98));z-index:9999}
-    .loader-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);text-align:center;backdrop-filter:blur(6px)}
-    .logo-center{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;letter-spacing:6px;margin-bottom:10px;text-shadow:0 8px 30px rgba(244,209,138,0.06)}
-    .loader-sub{color:var(--muted);font-size:13px}
-
-    header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+    /* layout */
+    .wrap{position:relative;z-index:2;max-width:1180px;margin:36px auto;padding:22px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
     .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:68px;height:68px;border-radius:12px;background:linear-gradient(180deg,#0b0b0d,#040405);display:grid;place-items:center;color:var(--gold);font-family:Orbitron;padding:6px;border:1px solid rgba(255,215,102,0.06)}
-    .brand h2{font-size:18px}
-    nav{display:flex;gap:12px}
-    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .22s}
-    nav a:hover{color:#080808;background:linear-gradient(90deg,var(--gold),var(--accent));box-shadow:0 12px 40px rgba(244,209,138,0.08)}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,#0b0b0b,#060606);display:grid;place-items:center;color:var(--gold);font-family:Orbitron;font-size:20px;border:1px solid rgba(255,212,138,0.06)}
+    nav{display:flex;gap:10px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:9px;transition:all .2s}
+    nav a:hover{color:#050505;background:linear-gradient(90deg,var(--gold),var(--accent));box-shadow:0 16px 40px rgba(255,212,138,0.06)}
 
     /* hero */
-    .hero{display:grid;grid-template-columns:1fr 380px;gap:26px;align-items:center;min-height:78vh}
-    .hero-left{padding:28px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
-    .sparkles{position:absolute;inset:-10%;pointer-events:none;opacity:0.25}
-    h1{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;line-height:1;margin-bottom:8px}
-    .lead{color:var(--muted);margin-bottom:14px}
-    .pills{display:flex;gap:10px;flex-wrap:wrap}
-    .pill{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,215,102,0.04);color:var(--gold);font-weight:600}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;min-height:78vh}
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:28px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(6px);position:relative;overflow:hidden}
 
-    .cta-row{margin-top:18px;display:flex;gap:12px}
-    .btn{padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));color:#071018;box-shadow:0 18px 50px rgba(244,209,138,0.12);transition:transform .22s}
+    .hero-left h1{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;margin-bottom:6px}
+    .tagline{color:var(--muted);font-size:16px;margin-bottom:12px}
+    .type{color:#fff;display:inline-block;font-weight:700}
+    .pills{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,212,138,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,212,138,0.04);color:var(--gold);font-weight:700}
+
+    .cta{display:flex;gap:12px;margin-top:18px}
+    .btn{padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--accent));color:#081018;box-shadow:0 20px 60px rgba(255,212,138,0.08);transition:transform .18s}
     .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
 
-    /* profile side */
-    .profile{border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);text-align:center}
-    .avatar{width:100%;height:360px;border-radius:10px;object-fit:cover;border:4px solid rgba(255,215,102,0.05);box-shadow:0 30px 60px rgba(0,0,0,0.7)}
-    .meta{display:flex;justify-content:space-between;margin-top:10px;color:var(--muted);font-size:13px}
+    /* right profile */
+    .profile{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .avatar{width:100%;height:420px;border-radius:12px;object-fit:cover;border:6px solid rgba(255,212,138,0.06);box-shadow:0 40px 100px rgba(4,6,9,0.7);transform-origin:center}
+    .meta{display:flex;justify-content:space-between;width:100%;color:var(--muted);font-size:13px}
+
+    /* live QA scanner (animated) */
+    .scanner{position:absolute;left:18px;bottom:18px;padding:10px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);display:flex;gap:10px;align-items:center}
+    .scanner .bar{width:160px;height:8px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+    .scanner .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--accent));box-shadow:0 10px 28px rgba(255,212,138,0.08);transition:width 1.8s}
 
     /* sections */
-    section{margin-top:34px}
+    section{margin-top:36px}
     .sec-title{font-family:Orbitron,monospace;color:var(--gold);font-size:20px;margin-bottom:14px}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-    .card{position:relative;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
+    .card{position:relative;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
     .card h3{color:#fff6df;margin-bottom:8px}
     .card p{color:var(--muted);line-height:1.6}
     .card .shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,245,220,0.06),transparent);transform:translateX(-130%);pointer-events:none}
-    .card:hover{transform:translateY(-10px);box-shadow:0 40px 120px rgba(244,209,138,0.06)}
+    .card:hover{transform:translateY(-10px);box-shadow:0 40px 120px rgba(255,212,138,0.06)}
     .card:hover .shimmer{transform:translateX(130%);transition:transform .95s cubic-bezier(.2,.9,.2,1)}
 
-    /* skill bars */
+    /* skills */
     .skill{display:flex;align-items:center;gap:12px;margin-bottom:12px}
     .skill strong{width:160px;color:#cff8ec}
-    .bar{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
-    .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 30px rgba(244,209,138,0.08);transition:width 1.6s cubic-bezier(.2,.9,.2,1)}
+    .barWrap{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .barWrap i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 30px rgba(255,212,138,0.08);transition:width 1.6s}
+
+    /* project cards with bug->check animation */
+    .projGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .proj{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.012),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
+    .proj .icon{position:absolute;right:12px;top:12px;width:58px;height:58px;border-radius:12px;display:grid;place-items:center;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .proj svg{width:34px;height:34px}
 
     /* timeline */
     .timeline{position:relative;padding-left:18px}
     .timeline:before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--gold),transparent)}
     .tl-item{position:relative;padding:14px 12px 14px 28px;border-radius:10px}
-    .tl-item .dot{position:absolute;left:-6px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(244,209,138,0.12)}
+    .tl-item .dot{position:absolute;left:-6px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(255,212,138,0.12)}
 
     /* contact */
-    .contact-wrap{display:flex;gap:18px;align-items:flex-start}
-    .contact-form{flex:1;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+    .contactWrap{display:flex;gap:18px;align-items:flex-start}
+    .contactForm{flex:1;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
     .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none}
-    .input:focus,textarea:focus{box-shadow:0 0 20px rgba(244,209,138,0.12);border-color:rgba(255,215,102,0.18)}
+    .input:focus,textarea:focus{box-shadow:0 0 20px rgba(255,212,138,0.12);border-color:rgba(255,212,138,0.18)}
 
     /* cursor aura */
-    #aura{position:fixed;left:0;top:0;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:4;mix-blend-mode:screen;background:radial-gradient(circle, rgba(255,245,220,0.12), rgba(244,209,138,0.04) 30%, transparent 60%);transform:translate(-50%,-50%);opacity:0;transition:opacity .14s}
+    .cursor{position:fixed;left:0;top:0;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:4;mix-blend-mode:screen;background:radial-gradient(circle, rgba(255,245,220,0.12), rgba(255,212,138,0.04) 30%, transparent 60%);transform:translate(-50%,-50%);opacity:0;transition:opacity .12s}
 
-    footer{margin-top:30px;text-align:center;color:var(--muted);padding:18px}
+    footer{text-align:center;margin-top:30px;color:var(--muted);padding:18px}
 
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr;gap:18px}
-      .avatar{height:320px}
-      .grid{grid-template-columns:1fr}
-      .contact-wrap{flex-direction:column}
-    }
+    @media (max-width:980px){.hero{grid-template-columns:1fr;gap:20px}.avatar{height:320px}.grid{grid-template-columns:1fr}.projGrid{grid-template-columns:1fr}.contactWrap{flex-direction:column}}
   </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
-  <div class="noise"></div>
+  <div class="bg" aria-hidden>
+    <canvas id="bgCanvas"></canvas>
+    <div class="grid-lines"></div>
+  </div>
 
   <!-- loader -->
-  <div id="loader" aria-hidden="false">
-    <div class="loader-card">
-      <div class="logo-center" id="logoCenter">SR</div>
-      <div class="loader-sub">Shubham Raj Sharma — Quality Analyst</div>
+  <div id="loader" style="position:fixed;inset:0;display:grid;place-items:center;z-index:9999;background:linear-gradient(180deg,rgba(0,0,0,0.96),rgba(0,0,0,0.98));">
+    <div style="text-align:center;backdrop-filter:blur(6px);padding:24px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);">
+      <div style="font-family:Orbitron,monospace;font-size:46px;color:var(--gold);letter-spacing:6px;margin-bottom:8px;">SR</div>
+      <div style="color:var(--muted);">Shubham Raj Sharma — Quality Analyst</div>
     </div>
   </div>
 
-  <div id="aura"></div>
+  <div class="cursor" id="cursor"></div>
 
   <div class="wrap">
     <header>
       <div class="brand">
         <div class="logo">SR</div>
         <div>
-          <h2>Shubham Raj Sharma</h2>
+          <div style="font-weight:700">Shubham Raj Sharma</div>
           <div style="font-size:13px;color:var(--muted)">Quality Analyst • Manual & Automation</div>
         </div>
       </div>
@@ -128,44 +126,36 @@
         <a href="#skills">Skills</a>
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
-        <a href="#contact">Hire Me</a>
+        <a href="#contact">Hire</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero" id="hero">
-        <div class="hero-left">
-          <div class="sparkles">
-            <!-- small SVG sparkles for aura -->
-            <svg width="100%" height="100%" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden>
-              <g fill="none" stroke="rgba(244,209,138,0.08)" stroke-width="1">
-                <circle cx="80" cy="40" r="2" />
-                <circle cx="300" cy="20" r="1.6" />
-                <circle cx="520" cy="120" r="2.2" />
-                <circle cx="420" cy="70" r="1.4" />
-                <circle cx="130" cy="220" r="2.6" />
-              </g>
-            </svg>
-          </div>
-
+      <section class="hero">
+        <div class="panel hero-left">
           <h1>Shubham Raj Sharma</h1>
-          <p class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</p>
+          <div class="tagline">Quality Analyst — <span class="type" id="typewriter">Manual Testing • Automation • API Testing</span></div>
 
-          <div class="pills">
-            <div class="pill">Manual Testing</div>
-            <div class="pill">Automation (Selenium, TestNG)</div>
-            <div class="pill">API Testing (Postman)</div>
-            <div class="pill">Mobile QA (Android & iOS)</div>
+          <div class="pills" style="margin-top:14px">
+            <div class="pill">STLC & SDLC</div>
+            <div class="pill">Selenium</div>
+            <div class="pill">Postman</div>
+            <div class="pill">JIRA / Bug Tracking</div>
           </div>
 
-          <div class="cta-row">
+          <div class="cta">
             <button class="btn" id="hireBtn">Hire Me</button>
             <button class="btn secondary" id="cvBtn">Download CV</button>
           </div>
+
+          <div class="scanner" style="bottom:18px;left:18px">
+            <div style="font-size:13px;color:var(--muted);margin-right:8px">Analyzer</div>
+            <div class="bar"><i style="width:64%"></i></div>
+          </div>
         </div>
 
-        <aside class="profile">
-          <img id="pf" class="avatar" src="shubham.jpg" alt="Shubham Raj Sharma" onerror="this.src='https://via.placeholder.com/900x600/0b0b0b/f4d18a?text=Shubham+Raj+Sharma'">
+        <aside class="profile panel">
+          <img id="avatar" class="avatar" src="profile.jpg" alt="Shubham Raj Sharma" onerror="this.src='https://via.placeholder.com/900x600/0b0b0b/ffd48a?text=Shubham+Raj+Sharma'">
           <div class="meta">
             <div>
               <div style="font-weight:700">Shubham Raj Sharma</div>
@@ -188,16 +178,16 @@
             <h3>Core QA</h3>
             <p>Manual testing, test-case design, defect lifecycle, regression testing, exploratory testing and usability checks.</p>
             <div style="margin-top:12px">
-              <div class="skill"><strong>Manual Testing</strong><div class="bar"><i style="width:96%"></i></div></div>
-              <div class="skill"><strong>Automation (Selenium)</strong><div class="bar"><i style="width:86%"></i></div></div>
-              <div class="skill"><strong>API Testing (Postman)</strong><div class="bar"><i style="width:90%"></i></div></div>
+              <div class="skill"><strong>Manual Testing</strong><div class="barWrap"><i style="width:96%"></i></div></div>
+              <div class="skill"><strong>Automation (Selenium)</strong><div class="barWrap"><i style="width:86%"></i></div></div>
+              <div class="skill"><strong>API Testing (Postman)</strong><div class="barWrap"><i style="width:90%"></i></div></div>
             </div>
           </div>
 
           <div class="card">
             <div class="shimmer"></div>
-            <h3>Tools & Platform</h3>
-            <p>JIRA, Bugzilla, ClickUp, TestNG, SQL validation, Android & iOS testing, cross-browser checks and CI integrations.</p>
+            <h3>Tools & Platforms</h3>
+            <p>JIRA, Bugzilla, ClickUp, TestNG, SQL validation, Android & iOS testing, cross-browser verification and CI workflows.</p>
           </div>
         </div>
       </section>
@@ -224,18 +214,55 @@
 
       <section id="projects">
         <div class="sec-title">Projects</div>
-        <div class="grid">
-          <div class="card"><div class="shimmer"></div><h3>OpenStatus</h3><p>Functional & performance testing for Android & iOS; identifying cross-device issues and ensuring stability.</p></div>
-          <div class="card"><div class="shimmer"></div><h3>EndorseList</h3><p>Tested endorsements, UI consistency and performance across devices.</p></div>
-          <div class="card"><div class="shimmer"></div><h3>SeekRoomie</h3><p>Validated matching logic, chat flows and cross-platform reliability.</p></div>
-          <div class="card"><div class="shimmer"></div><h3>Taropy</h3><p>Usability testing and bug triage for card draws, daily readings and UI interactions.</p></div>
+        <div class="projGrid">
+          <div class="proj">
+            <div class="shimmer"></div>
+            <h3>OpenStatus</h3>
+            <p>Functional & performance testing for Android & iOS; identifying cross-device issues and ensuring stability.</p>
+            <div class="icon" title="Verify">
+              <!-- SVG bug and check that animates on hover -->
+              <svg viewBox="0 0 64 64" id="icon1" xmlns="http://www.w3.org/2000/svg">
+                <g id="bug" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="1">
+                  <ellipse cx="32" cy="34" rx="10" ry="8" fill="none" stroke="white" />
+                  <path d="M20 30c-4-6-2-10 4-12" stroke="white" />
+                  <path d="M44 30c4-6 2-10-4-12" stroke="white" />
+                  <path d="M26 26v-6" stroke="white" />
+                  <path d="M38 26v-6" stroke="white" />
+                </g>
+                <g id="check" fill="none" stroke="var(--gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+                  <path id="checkPath" d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <div class="proj">
+            <div class="shimmer"></div>
+            <h3>EndorseList</h3>
+            <p>Tested endorsements, UI consistency and performance across devices.</p>
+            <div class="icon" title="Verify"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="32" cy="34" rx="10" ry="8" /><path d="M20 30c-4-6-2-10 4-12" /><path d="M44 30c4-6 2-10-4-12" /><path d="M26 26v-6" /><path d="M38 26v-6" /></g><g fill="none" stroke="var(--gold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0"><path d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g></svg></div>
+          </div>
+
+          <div class="proj">
+            <div class="shimmer"></div>
+            <h3>SeekRoomie</h3>
+            <p>Validated matching logic, chat flows and cross-platform reliability.</p>
+            <div class="icon" title="Verify"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="1.6"><ellipse cx="32" cy="34" rx="10" ry="8" /><path d="M20 30c-4-6-2-10 4-12" /><path d="M44 30c4-6 2-10-4-12" /><path d="M26 26v-6" /><path d="M38 26v-6" /></g><g fill="none" stroke="var(--gold)" stroke-width="2.6" opacity="0"><path d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g></svg></div>
+          </div>
+
+          <div class="proj">
+            <div class="shimmer"></div>
+            <h3>Taropy</h3>
+            <p>Usability testing and bug triage for card draws, daily readings and UI interactions.</p>
+            <div class="icon" title="Verify"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="1.6"><ellipse cx="32" cy="34" rx="10" ry="8" /><path d="M20 30c-4-6-2-10 4-12" /><path d="M44 30c4-6 2-10-4-12" /><path d="M26 26v-6" /><path d="M38 26v-6" /></g><g fill="none" stroke="var(--gold)" stroke-width="2.6" opacity="0"><path d="M18 34l8 8 20-20" stroke-dasharray="100" stroke-dashoffset="100"/></g></svg></div>
+          </div>
         </div>
       </section>
 
       <section id="contact">
         <div class="sec-title">Hire Me</div>
-        <div class="contact-wrap">
-          <form class="contact-form" id="contactForm">
+        <div class="contactWrap">
+          <form class="contactForm" id="contactForm">
             <input class="input" id="name" placeholder="Your name" required>
             <input class="input" id="email" type="email" placeholder="Your email" required>
             <input class="input" id="subject" placeholder="Subject" required>
@@ -243,7 +270,7 @@
             <button class="btn" type="submit">Send Message</button>
           </form>
 
-          <aside class="card" style="width:320px;text-align:center">
+          <aside class="panel" style="width:320px;text-align:center">
             <h3 style="color:var(--gold)">Fast & detailed QA reports</h3>
             <p style="color:var(--muted);margin-top:8px">Available for freelance & full-time QA, automation scripting and API testing.</p>
             <div style="margin-top:16px;color:var(--muted)">LinkedIn: <a href="https://www.linkedin.com/in/shubham-raj-sharma-9a64611b7" target="_blank" style="color:var(--gold);text-decoration:none">View profile</a></div>
@@ -251,85 +278,90 @@
         </div>
       </section>
 
-      <footer>© 2025 Shubham Raj Sharma — Quality First</footer>
+      <footer style="margin-top:36px;text-align:center;color:var(--muted);">© 2025 Shubham Raj Sharma — QA First</footer>
     </main>
   </div>
 
   <script>
-    // basic canvas particle / aurora + shimmer
-    const canvas = document.getElementById('bg'); const ctx = canvas.getContext('2d'); let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
-    window.addEventListener('resize', ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;create();});
+    // Canvas background: particles + aurora streaks
+    const canvas = document.getElementById('bgCanvas'); const ctx = canvas.getContext('2d'); let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+    window.addEventListener('resize', ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;setup();});
 
-    let parts = [], streaks=[];
-    function create(){parts=[];streaks=[];const pc = Math.max(70, Math.floor((W*H)/90000)); for(let i=0;i<pc;i++){parts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.4,vx:(Math.random()-0.5)*0.3,vy:Math.random()*0.35+0.02,alpha:0.04+Math.random()*0.3})}
-      for(let s=0;s<5;s++){streaks.push({x:Math.random()*W,y:Math.random()*H,w:300+Math.random()*700,h:60+Math.random()*120,spd:0.08+Math.random()*0.4,a:0.02+Math.random()*0.06,tilt:-0.18+(Math.random()*0.36)})}
+    let particles = [], streaks = [];
+    function setup(){particles=[];streaks=[];const count = Math.max(80, Math.floor((W*H)/85000)); for(let i=0;i<count;i++){particles.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+0.6,vx:(Math.random()-0.5)*0.3,vy:Math.random()*0.2+0.02,alpha:0.03+Math.random()*0.35})}
+      for(let s=0;s<5;s++){streaks.push({x:Math.random()*W,y:Math.random()*H,w:300+Math.random()*700,h:60+Math.random()*120,spd:0.06+Math.random()*0.35,a:0.02+Math.random()*0.06,tilt:-0.18+(Math.random()*0.36)})}
     }
-    create();
+    setup();
+
     function render(){ctx.clearRect(0,0,W,H);
-      const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'rgba(5,5,6,0.9)'); g.addColorStop(1,'rgba(5,7,10,0.98)'); ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+      // base gradient
+      const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'rgba(6,6,8,0.9)'); g.addColorStop(1,'rgba(4,6,9,0.98)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
       // streaks
-      for(let s of streaks){s.x += s.spd; if(s.x>W+800) s.x=-1200; const lg = ctx.createLinearGradient(s.x,s.y,s.x+s.w,s.y); lg.addColorStop(0, `rgba(244,209,138,${s.a})`); lg.addColorStop(0.5, `rgba(255,245,220,${s.a*0.95})`); lg.addColorStop(1, `rgba(244,209,138,${s.a})`); ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.tilt); ctx.fillStyle=lg; ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h); ctx.restore(); }
-      // particles + connect
-      for(let p of parts){p.x += p.vx; p.y -= p.vy; if(p.x<-10) p.x=W+10; if(p.x>W+10) p.x=-10; if(p.y<-10) p.y=H+10; if(p.y>H+10) p.y=-10; ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.alpha})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
+      for(let s of streaks){s.x += s.spd; if(s.x>W+800) s.x=-1200; const lg = ctx.createLinearGradient(s.x,s.y,s.x+s.w,s.y); lg.addColorStop(0, `rgba(255,212,138,${s.a})`); lg.addColorStop(0.5, `rgba(255,245,220,${s.a*0.95})`); lg.addColorStop(1, `rgba(255,212,138,${s.a})`); ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.tilt); ctx.fillStyle=lg; ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h); ctx.restore(); }
+      // particles
+      for(let p of particles){p.x += p.vx; p.y -= p.vy; if(p.x<-10) p.x=W+10; if(p.x>W+10) p.x=-10; if(p.y<-10) p.y=H+10; if(p.y>H+10) p.y=-10; ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.alpha})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
       requestAnimationFrame(render);
     }
     render();
 
     // cursor aura
-    const aura = document.getElementById('aura'); document.addEventListener('mousemove', e=>{aura.style.opacity=1; aura.style.left=e.clientX+'px'; aura.style.top=e.clientY+'px';}); document.addEventListener('mouseleave', ()=>aura.style.opacity=0);
+    const cursor = document.getElementById('cursor'); document.addEventListener('mousemove', e=>{cursor.style.opacity=1; cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px';}); document.addEventListener('mouseleave', ()=>cursor.style.opacity=0);
 
-    // GSAP animations
-    function init(){ if(typeof gsap === 'undefined'){ document.getElementById('loader').style.display='none'; return; }
+    // typewriter for tagline
+    const typeEl = document.getElementById('typewriter'); const phrases = ['Manual Testing','Automation (Selenium)','API Testing (Postman)','Mobile QA — Android & iOS']; let pi=0, ti=0;
+    function typeLoop(){ const txt = phrases[pi]; typeEl.innerText = txt.slice(0,++ti); if(ti<txt.length) setTimeout(typeLoop,38); else setTimeout(()=>{ eraseLoop(); },900); }
+    function eraseLoop(){ const txt = phrases[pi]; typeEl.innerText = txt.slice(0, --ti); if(ti>0) setTimeout(eraseLoop,30); else{ pi=(pi+1)%phrases.length; setTimeout(typeLoop,220); } }
+    setTimeout(typeLoop,800);
+
+    // GSAP animations and interactions
+    function start(){ if(typeof gsap === 'undefined'){ document.getElementById('loader').style.display='none'; return; }
       gsap.registerPlugin(ScrollTrigger);
-      // loader timeline
-      const logo = document.getElementById('logoCenter'); const loader = document.getElementById('loader');
-      const tl = gsap.timeline({onComplete:()=>{ // fade loader
-        gsap.to(loader,{opacity:0,duration:0.8,onComplete:()=>loader.style.display='none'});
-      }});
-      tl.from(logo,{scale:0.6,opacity:0,duration:0.8,ease:'back.out(1.4)'});
-      tl.from('.loader-sub',{y:8,opacity:0,duration:0.6},'-=0.35');
-      tl.to(logo,{scale:1.04,duration:0.5,repeat:1,yoyo:true,ease:'sine.inOut'},'+=0.1');
+      // hide loader with flourish
+      const loader = document.getElementById('loader'); gsap.to(loader,{opacity:0,duration:0.8,delay:0.8,onComplete:()=>loader.style.display='none'});
 
-      // entrance
-      gsap.from('.logo',{opacity:0,y:-16,duration:0.8,delay:0.9});
-      gsap.from('.hero-left',{opacity:0,y:26,duration:1,delay:1});
-      gsap.from('.profile',{opacity:0,y:26,duration:1,delay:1.1});
+      gsap.from('.logo',{y:-14,opacity:0,duration:0.9,delay:0.9});
+      gsap.from('.panel',{y:30,opacity:0,duration:1,stagger:0.06,delay:1.1});
+      gsap.to('.pill',{y:-8,repeat:-1,yoyo:true,duration:2.4,stagger:0.12,delay:1.6});
 
-      // floating pills
-      gsap.to('.pill',{y:-6,repeat:-1,yoyo:true,duration:2.4,stagger:0.12,ease:'sine.inOut',delay:1.6});
+      // reveal cards on scroll
+      gsap.utils.toArray('.card').forEach((c,i)=>{ gsap.from(c,{opacity:0,y:26,duration:0.9,delay:0.8 + i*0.06, ease:'power3.out', scrollTrigger:{trigger:c,start:'top 88%'}}); });
 
-      // shimmer entrance on cards
-      gsap.utils.toArray('.card').forEach((c,i)=>{
-        gsap.from(c,{opacity:0,y:26,duration:0.9,delay:1.2 + i*0.08, ease:'power3.out', scrollTrigger:{trigger:c, start:'top 90%'}});
-      });
-
-      // skill bars animation when visible
-      gsap.utils.toArray('.bar i').forEach((bar)=>{
-        const w = bar.style.width || '70%'; bar.style.width='0%';
-        ScrollTrigger.create({trigger:bar, start:'top 85%', onEnter:()=>gsap.to(bar,{width:w,duration:1.6,ease:'power3.out'})});
-      });
+      // animate skill bars when visible
+      gsap.utils.toArray('.barWrap i').forEach((bar)=>{ const w = bar.style.width || '70%'; bar.style.width='0%'; ScrollTrigger.create({trigger:bar,start:'top 90%',onEnter:()=>gsap.to(bar,{width:w,duration:1.6,ease:'power3.out'})}); });
 
       // profile parallax
-      const pf = document.getElementById('pf'); const box = document.querySelector('.profile');
-      box.addEventListener('mousemove', e=>{ const r = box.getBoundingClientRect(); const dx = (e.clientX - r.left - r.width/2)/30; const dy = (e.clientY - r.top - r.height/2)/30; gsap.to(pf,{x:dx,y:dy,duration:0.6,ease:'power3.out'}); });
-      box.addEventListener('mouseleave', ()=> gsap.to(pf,{x:0,y:0,duration:0.8,ease:'power3.out'}));
+      const avatar = document.getElementById('avatar'); const profile = document.querySelector('.profile'); profile.addEventListener('mousemove', e=>{ const r=profile.getBoundingClientRect(); const dx=(e.clientX - r.left - r.width/2)/28; const dy=(e.clientY - r.top - r.height/2)/28; gsap.to(avatar,{x:dx,y:dy,duration:0.6,ease:'power3.out'}); }); profile.addEventListener('mouseleave', ()=>gsap.to(avatar,{x:0,y:0,duration:0.8}));
 
-      // hover glows on cards
-      document.querySelectorAll('.card').forEach(c=>{ c.addEventListener('mouseenter', ()=> gsap.to(c,{y:-10,boxShadow:'0 40px 120px rgba(244,209,138,0.06)',duration:0.32})); c.addEventListener('mouseleave', ()=> gsap.to(c,{y:0,boxShadow:'0 0 0 rgba(0,0,0,0)',duration:0.32})); });
+      // project icon hover: bug -> check draw
+      document.querySelectorAll('.proj .icon').forEach(icon=>{
+        const sv = icon.querySelector('svg'); const bug = sv.querySelector('#bug'); const check = sv.querySelector('#check'); const chkPath = sv.querySelector('#checkPath');
+        icon.addEventListener('mouseenter', ()=>{
+          gsap.to(bug,{opacity:0,duration:0.28,ease:'power1.in'});
+          gsap.to(check,{opacity:1,duration:0.28,ease:'power1.in'});
+          gsap.to(chkPath,{strokeDashoffset:0,duration:0.7,ease:'power3.out'});
+        });
+        icon.addEventListener('mouseleave', ()=>{
+          gsap.to(chkPath,{strokeDashoffset:100,duration:0.36});
+          gsap.to(check,{opacity:0,duration:0.28});
+          gsap.to(bug,{opacity:1,duration:0.28});
+        });
+      });
 
-      // nav scroll smooth
+      // hover glows
+      document.querySelectorAll('.card').forEach(c=>{ c.addEventListener('mouseenter', ()=>gsap.to(c,{y:-10,boxShadow:'0 40px 120px rgba(255,212,138,0.08)',duration:0.32})); c.addEventListener('mouseleave', ()=>gsap.to(c,{y:0,boxShadow:'0 0 0 rgba(0,0,0,0)',duration:0.32})); });
+
+      // nav smooth
       document.querySelectorAll('nav a').forEach(a=>{ a.addEventListener('click', e=>{ e.preventDefault(); const id=a.getAttribute('href').slice(1); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }); });
 
-      // buttons
-      document.getElementById('hireBtn').addEventListener('click', ()=>{ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); });
-      document.getElementById('cvBtn').addEventListener('click', ()=>{ const link = document.createElement('a'); link.href='#'; link.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(link); link.click(); link.remove(); gsap.fromTo('#cvBtn',{scale:1},{scale:1.06,duration:0.12,yoyo:true,repeat:1}); });
+      // Hire & CV
+      document.getElementById('hireBtn').addEventListener('click', ()=>{ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); gsap.from('#contact',{y:20,opacity:0,duration:0.8}); });
+      document.getElementById('cvBtn').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href='#'; a.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(a); a.click(); a.remove(); gsap.fromTo('#cvBtn',{scale:1},{scale:1.06,duration:0.12,yoyo:true,repeat:1}); });
 
       // contact form animation
-      const form = document.getElementById('contactForm'); form.addEventListener('submit', e=>{ e.preventDefault(); const btn = form.querySelector('button'); btn.disabled=true; const original = btn.innerText; btn.innerText='Sending...'; gsap.to(btn,{scale:0.96,duration:0.12}); setTimeout(()=>{ btn.innerText='Sent ✓'; gsap.to(btn,{scale:1.02,duration:0.18}); setTimeout(()=>{ btn.disabled=false; btn.innerText=original; form.reset(); },1300); },900); });
+      const form = document.getElementById('contactForm'); form.addEventListener('submit', e=>{ e.preventDefault(); const btn = form.querySelector('button'); btn.disabled=true; const orig=btn.innerText; btn.innerText='Sending...'; gsap.to(btn,{scale:0.96,duration:0.12}); setTimeout(()=>{ btn.innerText='Sent ✓'; gsap.to(btn,{scale:1.02,duration:0.18}); setTimeout(()=>{ btn.disabled=false; btn.innerText=orig; form.reset(); },1200); },900); });
     }
 
-    // ensure init runs
-    window.addEventListener('load', ()=>{ setTimeout(init,140); setTimeout(()=>{ const l=document.getElementById('loader'); if(l) l.style.display='none'; },5000); });
+    window.addEventListener('load', ()=>{ setTimeout(start,160); setTimeout(()=>{ const l=document.getElementById('loader'); if(l) l.style.display='none'; },4200); });
   </script>
 </body>
 </html>
