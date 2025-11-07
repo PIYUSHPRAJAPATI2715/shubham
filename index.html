@@ -3,135 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shubham Raj Sharma — QA Portfolio (Black & Gold Universe)</title>
+  <title>Shubham Raj Sharma — QA Portfolio (Black & Gold)</title>
 
   <!-- Fonts + GSAP -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
     :root{
-      --bg:#030303;
-      --muted:#cfcfcf;
-      --gold:#f2d88b;            /* light gold */
-      --card:#0b0b0b;
-      --glass: rgba(255,255,255,0.03);
+      --bg:#050507; --panel:#0b0b0d; --muted:#c7d3db; --gold:#f4d18a; --accent:#ffdca6;
+      --glass:rgba(255,255,255,0.03);
+      --glass-2:rgba(255,255,255,0.02);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:var(--bg);color:#fff;font-family:'Poppins',sans-serif;-webkit-font-smoothing:antialiased;}
+    html,body{height:100%;background:linear-gradient(180deg,#020204 0%, #071018 60%);color:#eaf6f5;font-family:Poppins,system-ui,Segoe UI,Roboto,Arial;}
     a{color:inherit}
-    /* Canvas background is behind everything */
-    canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    /* Loader (center) */
-    #loader {
-      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
-      background:linear-gradient(0deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
-      z-index:9999;
-    }
-    .loader-logo{
-      font-family:'Playfair Display',serif;
-      color:var(--gold);
-      font-size:36px;
-      letter-spacing:2px;
-      margin-bottom:8px;
-      transform-origin:center;
-      filter:drop-shadow(0 6px 18px rgba(242,216,139,0.12));
-      opacity:0;
-    }
-    .loader-sub{color:var(--muted);font-size:13px;opacity:0}
-    /* tiny fallback text */
-    .loader-note{color:rgba(255,255,255,0.06);font-size:11px;margin-top:12px}
+    /* ---------- background layers ---------- */
+    canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+    .noise{position:fixed;inset:0;z-index:0;opacity:0.06;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.9" numOctaves="2"/></filter><rect width="100%" height="100%" filter="url(%23n)" fill="white"/></svg>')}
 
-    /* Container */
-    .site{max-width:1150px;margin:28px auto;padding:26px;position:relative;z-index:3}
-    header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo-box{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,#0c0c0c,#0a0a0a);display:grid;place-items:center;color:var(--gold);font-weight:700;font-family:'Playfair Display';font-size:20px;border:1px solid rgba(255,215,102,0.06)}
-    nav{display:flex;gap:10px}
-    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .24s}
-    nav a:hover{color:#050505;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 40px rgba(242,216,139,0.08)}
+    /* container */
+    .wrap{position:relative;z-index:2;max-width:1200px;margin:36px auto;padding:22px}
 
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:center;min-height:74vh;padding-top:10px}
-    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:30px;border-radius:14px;border:1px solid rgba(255,215,102,0.04);backdrop-filter:blur(6px)}
-    h1.hero-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:40px;line-height:1.02;margin-bottom:6px}
-    p.lead{color:var(--muted);margin-top:8px}
-    .badges{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-    .badge{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(255,215,102,0.05));color:var(--gold);font-weight:600;font-size:13px;border:1px solid rgba(255,215,102,0.04)}
+    /* loader */
+    #loader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%, rgba(244,209,138,0.06), rgba(0,0,0,0.98));z-index:9999}
+    .loader-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);text-align:center;backdrop-filter:blur(6px)}
+    .logo-center{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;letter-spacing:6px;margin-bottom:10px;text-shadow:0 8px 30px rgba(244,209,138,0.06)}
+    .loader-sub{color:var(--muted);font-size:13px}
 
-    .hero-cta{display:flex;gap:12px;margin-top:22px}
-    .btn{
-      padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:700;
-      background:linear-gradient(90deg,var(--gold),#fff2bd);
-      color:#020202;box-shadow:0 16px 40px rgba(242,216,139,0.12);transition:transform .22s,box-shadow .22s;
-    }
+    header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:68px;height:68px;border-radius:12px;background:linear-gradient(180deg,#0b0b0d,#040405);display:grid;place-items:center;color:var(--gold);font-family:Orbitron;padding:6px;border:1px solid rgba(255,215,102,0.06)}
+    .brand h2{font-size:18px}
+    nav{display:flex;gap:12px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .22s}
+    nav a:hover{color:#080808;background:linear-gradient(90deg,var(--gold),var(--accent));box-shadow:0 12px 40px rgba(244,209,138,0.08)}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:26px;align-items:center;min-height:78vh}
+    .hero-left{padding:28px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden}
+    .sparkles{position:absolute;inset:-10%;pointer-events:none;opacity:0.25}
+    h1{font-family:Orbitron,monospace;color:var(--gold);font-size:44px;line-height:1;margin-bottom:8px}
+    .lead{color:var(--muted);margin-bottom:14px}
+    .pills{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,215,102,0.04);color:var(--gold);font-weight:600}
+
+    .cta-row{margin-top:18px;display:flex;gap:12px}
+    .btn{padding:12px 18px;border-radius:999px;border:none;cursor:pointer;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--accent));color:#071018;box-shadow:0 18px 50px rgba(244,209,138,0.12);transition:transform .22s}
     .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
 
-    /* Profile card */
-    .profile{border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);display:flex;flex-direction:column;align-items:center}
-    .pf{width:100%;height:460px;object-fit:cover;border-radius:10px;border:4px solid rgba(255,215,102,0.06);box-shadow:0 30px 60px rgba(0,0,0,0.7);transition:transform .6s}
-    .meta{width:100%;display:flex;justify-content:space-between;padding:10px 6px}
-    .meta .small{color:var(--muted);font-size:13px}
+    /* profile side */
+    .profile{border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);text-align:center}
+    .avatar{width:100%;height:360px;border-radius:10px;object-fit:cover;border:4px solid rgba(255,215,102,0.05);box-shadow:0 30px 60px rgba(0,0,0,0.7)}
+    .meta{display:flex;justify-content:space-between;margin-top:10px;color:var(--muted);font-size:13px}
 
-    /* Section */
-    section{margin-top:40px}
-    .sec-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:22px;margin-bottom:18px}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-
-    .card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
-    .card h3{color:#fff6df;margin-bottom:8px;}
+    /* sections */
+    section{margin-top:34px}
+    .sec-title{font-family:Orbitron,monospace;color:var(--gold);font-size:20px;margin-bottom:14px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .card{position:relative;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);border:1px solid rgba(255,255,255,0.03);overflow:hidden;transition:transform .36s,box-shadow .36s}
+    .card h3{color:#fff6df;margin-bottom:8px}
     .card p{color:var(--muted);line-height:1.6}
+    .card .shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,245,220,0.06),transparent);transform:translateX(-130%);pointer-events:none}
+    .card:hover{transform:translateY(-10px);box-shadow:0 40px 120px rgba(244,209,138,0.06)}
+    .card:hover .shimmer{transform:translateX(130%);transition:transform .95s cubic-bezier(.2,.9,.2,1)}
 
-    /* shimmer strip */
-    .card .shimmer{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,245,200,0.08),transparent);transform:translateX(-120%);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
-    .card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(242,216,139,0.06)} 
-    .card:hover .shimmer{transform:translateX(120%)}
+    /* skill bars */
+    .skill{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .skill strong{width:160px;color:#cff8ec}
+    .bar{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffdca6);box-shadow:0 10px 30px rgba(244,209,138,0.08);transition:width 1.6s cubic-bezier(.2,.9,.2,1)}
+
+    /* timeline */
+    .timeline{position:relative;padding-left:18px}
+    .timeline:before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--gold),transparent)}
+    .tl-item{position:relative;padding:14px 12px 14px 28px;border-radius:10px}
+    .tl-item .dot{position:absolute;left:-6px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(244,209,138,0.12)}
 
     /* contact */
     .contact-wrap{display:flex;gap:18px;align-items:flex-start}
-    .contact-form{flex:1;background:rgba(0,0,0,0.45);padding:20px;border-radius:12px;border:1px solid rgba(255,215,102,0.04)}
-    .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none;transition:box-shadow .25s,border-color .25s}
-    .input:focus,textarea:focus{box-shadow:0 0 22px rgba(242,216,139,0.16);border-color:rgba(255,215,102,0.28)}
-    .cta-panel{width:320px;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,215,102,0.03),transparent);text-align:center}
-
-    /* footer */
-    footer{margin-top:40px;padding:28px;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.03);margin-bottom:24px}
+    .contact-form{flex:1;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+    .input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:12px;outline:none}
+    .input:focus,textarea:focus{box-shadow:0 0 20px rgba(244,209,138,0.12);border-color:rgba(255,215,102,0.18)}
 
     /* cursor aura */
-    #cursorAura{position:fixed;left:0;top:0;width:200px;height:200px;border-radius:50%;pointer-events:none;z-index:4;background:radial-gradient(circle, rgba(255,245,200,0.12), rgba(242,216,139,0.06) 30%, transparent 50%);mix-blend-mode:screen;transform:translate(-50%,-50%);transition:opacity .18s}
+    #aura{position:fixed;left:0;top:0;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:4;mix-blend-mode:screen;background:radial-gradient(circle, rgba(255,245,220,0.12), rgba(244,209,138,0.04) 30%, transparent 60%);transform:translate(-50%,-50%);opacity:0;transition:opacity .14s}
 
-    /* responsive */
+    footer{margin-top:30px;text-align:center;color:var(--muted);padding:18px}
+
     @media (max-width:980px){
-      .hero{grid-template-columns:1fr;gap:20px}
-      .pf{height:360px}
+      .hero{grid-template-columns:1fr;gap:18px}
+      .avatar{height:320px}
       .grid{grid-template-columns:1fr}
       .contact-wrap{flex-direction:column}
-      .cta-panel{width:100%}
     }
   </style>
 </head>
 <body>
-  <!-- canvas for streaks/particles -->
-  <canvas id="bgCanvas"></canvas>
+  <canvas id="bg"></canvas>
+  <div class="noise"></div>
 
   <!-- loader -->
   <div id="loader" aria-hidden="false">
-    <div class="loader-logo" id="srLogo">Shubham</div>
-    <div class="loader-sub" id="loaderSub">Shubham Raj Sharma — Quality Analyst</div>
-    <div class="loader-note">Preparing the Gold Aurora…</div>
+    <div class="loader-card">
+      <div class="logo-center" id="logoCenter">SR</div>
+      <div class="loader-sub">Shubham Raj Sharma — Quality Analyst</div>
+    </div>
   </div>
 
-  <!-- cursor aura -->
-  <div id="cursorAura" style="opacity:0"></div>
+  <div id="aura"></div>
 
-  <div class="site">
+  <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo-box">SR</div>
+        <div class="logo">SR</div>
         <div>
-          <div style="font-weight:700">Shubham Raj Sharma</div>
+          <h2>Shubham Raj Sharma</h2>
           <div style="font-size:13px;color:var(--muted)">Quality Analyst • Manual & Automation</div>
         </div>
       </div>
@@ -145,51 +134,70 @@
 
     <main>
       <section class="hero" id="hero">
-        <div class="hero-card">
-          <h1 class="hero-title">Shubham Raj Sharma</h1>
-          <p class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</p>
-
-          <div class="badges" aria-hidden>
-            <div class="badge">Manual Testing</div>
-            <div class="badge">Automation (Selenium)</div>
-            <div class="badge">API Testing</div>
-            <div class="badge">Mobile QA</div>
+        <div class="hero-left">
+          <div class="sparkles">
+            <!-- small SVG sparkles for aura -->
+            <svg width="100%" height="100%" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden>
+              <g fill="none" stroke="rgba(244,209,138,0.08)" stroke-width="1">
+                <circle cx="80" cy="40" r="2" />
+                <circle cx="300" cy="20" r="1.6" />
+                <circle cx="520" cy="120" r="2.2" />
+                <circle cx="420" cy="70" r="1.4" />
+                <circle cx="130" cy="220" r="2.6" />
+              </g>
+            </svg>
           </div>
 
-          <div class="hero-cta">
+          <h1>Shubham Raj Sharma</h1>
+          <p class="lead">Skilled Quality Analyst focused on delivering high-quality software through manual & automation testing, robust API validation and clear defect reporting.</p>
+
+          <div class="pills">
+            <div class="pill">Manual Testing</div>
+            <div class="pill">Automation (Selenium, TestNG)</div>
+            <div class="pill">API Testing (Postman)</div>
+            <div class="pill">Mobile QA (Android & iOS)</div>
+          </div>
+
+          <div class="cta-row">
             <button class="btn" id="hireBtn">Hire Me</button>
             <button class="btn secondary" id="cvBtn">Download CV</button>
           </div>
         </div>
 
         <aside class="profile">
-          <img id="pfImg" class="pf" src="profile.jpg" alt="Shubham Raj Sharma">
+          <img id="pf" class="avatar" src="shubham.jpg" alt="Shubham Raj Sharma" onerror="this.src='https://via.placeholder.com/900x600/0b0b0b/f4d18a?text=Shubham+Raj+Sharma'">
           <div class="meta">
             <div>
               <div style="font-weight:700">Shubham Raj Sharma</div>
-              <div class="small">Quality Analyst — Eoxysit Solution LLP</div>
+              <div style="color:var(--muted);font-size:13px">Quality Analyst — Eoxysit Solution LLP</div>
             </div>
-            <div style="text-align:right">
-              <div class="small">📍 Jaipur</div>
-              <div class="small">📧 shubhamrajsharma5@gmail.com</div>
-              <div class="small">📱 +91 7033330073</div>
+            <div style="text-align:right;color:var(--muted);font-size:13px">
+              <div>📍 Jaipur</div>
+              <div>📧 shubhamrajsharma5@gmail.com</div>
+              <div>📱 +91 7033330073</div>
             </div>
           </div>
         </aside>
       </section>
 
       <section id="skills">
-        <div class="sec-title">Skills</div>
+        <div class="sec-title">Skills & Tools</div>
         <div class="grid">
           <div class="card">
             <div class="shimmer"></div>
-            <h3>Testing & QA</h3>
-            <p>Manual & automation testing (Selenium, TestNG). API testing with Postman. Test case design and defect lifecycle management.</p>
+            <h3>Core QA</h3>
+            <p>Manual testing, test-case design, defect lifecycle, regression testing, exploratory testing and usability checks.</p>
+            <div style="margin-top:12px">
+              <div class="skill"><strong>Manual Testing</strong><div class="bar"><i style="width:96%"></i></div></div>
+              <div class="skill"><strong>Automation (Selenium)</strong><div class="bar"><i style="width:86%"></i></div></div>
+              <div class="skill"><strong>API Testing (Postman)</strong><div class="bar"><i style="width:90%"></i></div></div>
+            </div>
           </div>
+
           <div class="card">
             <div class="shimmer"></div>
-            <h3>Tools & Tech</h3>
-            <p>JIRA, Bugzilla, ClickUp, Postman, SQL validation, Android & iOS testing, cross-browser verification.</p>
+            <h3>Tools & Platform</h3>
+            <p>JIRA, Bugzilla, ClickUp, TestNG, SQL validation, Android & iOS testing, cross-browser checks and CI integrations.</p>
           </div>
         </div>
       </section>
@@ -203,10 +211,13 @@
             <p><em>Oct 2023 — Present</em></p>
             <p>Executed manual and automation testing across Android, iOS & web; wrote test plans; reported defects and automated regression suites.</p>
           </div>
-          <div class="card">
+
+          <div class="card timeline">
             <div class="shimmer"></div>
-            <h3>Education</h3>
-            <p><strong>B.Tech — Arya College of Engineering</strong><br>Aug 2022 — Aug 2025 (ongoing)<br><strong>Diploma — Government Leather Institute</strong><br>Aug 2019 — Aug 2022</p>
+            <h3>Education & Achievements</h3>
+            <div class="tl-item"><span class="dot"></span><strong>B.Tech (CSE)</strong><div style="color:var(--muted);font-size:13px">Arya College of Engineering — Aug 2022 - Aug 2025</div></div>
+            <div class="tl-item" style="margin-top:10px"><span class="dot"></span><strong>Diploma (CSE)</strong><div style="color:var(--muted);font-size:13px">Government Leather Institute — Aug 2019 - Aug 2022</div></div>
+            <div class="tl-item" style="margin-top:10px"><span class="dot"></span><strong>Workshop</strong><div style="color:var(--muted);font-size:13px">5 Days Universal Human Values — AKTU</div></div>
           </div>
         </div>
       </section>
@@ -214,26 +225,10 @@
       <section id="projects">
         <div class="sec-title">Projects</div>
         <div class="grid">
-          <div class="card">
-            <div class="shimmer"></div>
-            <h3>OpenStatus</h3>
-            <p>Functional & performance testing for Android & iOS; identifying cross-device issues and ensuring stability.</p>
-          </div>
-          <div class="card">
-            <div class="shimmer"></div>
-            <h3>EndorseList</h3>
-            <p>Tested endorsements and UI consistency; tracked & validated fixes across multiple devices.</p>
-          </div>
-          <div class="card">
-            <div class="shimmer"></div>
-            <h3>SeekRoomie</h3>
-            <p>Validated matching flow, chat features, and cross-platform reliability.</p>
-          </div>
-          <div class="card">
-            <div class="shimmer"></div>
-            <h3>Taropy</h3>
-            <p>Validated tarot draw logic and daily reading accuracy; ensured performance and usability.</p>
-          </div>
+          <div class="card"><div class="shimmer"></div><h3>OpenStatus</h3><p>Functional & performance testing for Android & iOS; identifying cross-device issues and ensuring stability.</p></div>
+          <div class="card"><div class="shimmer"></div><h3>EndorseList</h3><p>Tested endorsements, UI consistency and performance across devices.</p></div>
+          <div class="card"><div class="shimmer"></div><h3>SeekRoomie</h3><p>Validated matching logic, chat flows and cross-platform reliability.</p></div>
+          <div class="card"><div class="shimmer"></div><h3>Taropy</h3><p>Usability testing and bug triage for card draws, daily readings and UI interactions.</p></div>
         </div>
       </section>
 
@@ -248,275 +243,93 @@
             <button class="btn" type="submit">Send Message</button>
           </form>
 
-          <aside class="cta-panel">
-            <div style="font-weight:700;color:var(--gold)">Fast & detailed QA reports</div>
-            <div style="color:var(--muted);margin-top:10px">Available for freelance & full-time QA, automation scripting and API testing.</div>
-            <div style="margin-top:10px;color:var(--muted)">LinkedIn: <a href="https://www.linkedin.com/in/shubham-raj-sharma-9a64611b7" style="color:var(--gold);text-decoration:none" target="_blank">View profile</a></div>
+          <aside class="card" style="width:320px;text-align:center">
+            <h3 style="color:var(--gold)">Fast & detailed QA reports</h3>
+            <p style="color:var(--muted);margin-top:8px">Available for freelance & full-time QA, automation scripting and API testing.</p>
+            <div style="margin-top:16px;color:var(--muted)">LinkedIn: <a href="https://www.linkedin.com/in/shubham-raj-sharma-9a64611b7" target="_blank" style="color:var(--gold);text-decoration:none">View profile</a></div>
           </aside>
         </div>
       </section>
 
-      <footer>© 2025 Shubham Raj Sharma — Black & Gold Universe</footer>
+      <footer>© 2025 Shubham Raj Sharma — Quality First</footer>
     </main>
   </div>
 
   <script>
-    // SAFETY: fallback to ensure loader hides if GSAP or network blocked
-    const loader = document.getElementById('loader');
-    let loaderHidden = false;
-    function hideLoaderImmediate(){ if(loaderHidden) return; loaderHidden=true; loader.style.transition='opacity .6s'; loader.style.opacity=0; setTimeout(()=>{ loader.style.display='none'; },700); }
-    // fallback hide after 4.2s (in case GSAP doesn't run)
-    setTimeout(hideLoaderImmediate, 4200);
+    // basic canvas particle / aurora + shimmer
+    const canvas = document.getElementById('bg'); const ctx = canvas.getContext('2d'); let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+    window.addEventListener('resize', ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;create();});
 
-    // Canvas background: white/silver particles + slow aurora streak
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
-    let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
-    window.addEventListener('resize', ()=> { W = canvas.width = innerWidth; H = canvas.height = innerHeight; createParticles(); });
-
-    // particles config
-    let particles = [];
-    function createParticles(){
-      particles = [];
-      const count = Math.max(60, Math.floor((W*H)/90000));
-      for(let i=0;i<count;i++){
-        particles.push({
-          x: Math.random()*W,
-          y: Math.random()*H,
-          r: Math.random()*1.8 + 0.6,
-          vx: (Math.random()-0.5)*0.25,
-          vy: (Math.random()*0.4)+0.05,
-          a: 0.06 + Math.random()*0.35
-        });
-      }
+    let parts = [], streaks=[];
+    function create(){parts=[];streaks=[];const pc = Math.max(70, Math.floor((W*H)/90000)); for(let i=0;i<pc;i++){parts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.4,vx:(Math.random()-0.5)*0.3,vy:Math.random()*0.35+0.02,alpha:0.04+Math.random()*0.3})}
+      for(let s=0;s<5;s++){streaks.push({x:Math.random()*W,y:Math.random()*H,w:300+Math.random()*700,h:60+Math.random()*120,spd:0.08+Math.random()*0.4,a:0.02+Math.random()*0.06,tilt:-0.18+(Math.random()*0.36)})}
     }
-    createParticles();
-
-    // aurora streaks
-    const streaks = [];
-    for(let s=0;s<6;s++){
-      streaks.push({
-        x: Math.random()*W,
-        y: Math.random()*H,
-        w: 300 + Math.random()*700,
-        h: 60 + Math.random()*140,
-        spd: 0.12 + Math.random()*0.5,
-        alpha: 0.02 + Math.random()*0.06,
-        tilt: -0.18 + (Math.random()*0.36)
-      });
-    }
-
-    function render(){
-      ctx.clearRect(0,0,W,H);
-      // subtle black gradient to give depth
-      const g = ctx.createLinearGradient(0,0,0,H);
-      g.addColorStop(0, 'rgba(10,10,10,0.9)');
-      g.addColorStop(1, 'rgba(3,3,3,0.98)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0,0,W,H);
-
-      // streaks (aurora)
-      for(let s of streaks){
-        s.x += s.spd;
-        if(s.x > W + 800) s.x = -1200;
-        const lg = ctx.createLinearGradient(s.x, s.y, s.x+s.w, s.y);
-        lg.addColorStop(0, `rgba(242,216,139,${s.alpha})`);
-        lg.addColorStop(0.5, `rgba(255,245,220,${s.alpha*0.9})`);
-        lg.addColorStop(1, `rgba(242,216,139,${s.alpha})`);
-        ctx.save();
-        ctx.translate(s.x, s.y);
-        ctx.rotate(s.tilt);
-        ctx.fillStyle = lg;
-        ctx.fillRect(-s.w/2, -s.h/2, s.w, s.h);
-        ctx.restore();
-      }
-
-      // particles
-      for(let p of particles){
-        p.x += p.vx;
-        p.y -= p.vy;
-        if(p.x < -10) p.x = W + 10;
-        if(p.x > W + 10) p.x = -10;
-        if(p.y < -10) p.y = H + 10;
-        if(p.y > H + 10) p.y = -10;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ctx.fill();
-      }
+    create();
+    function render(){ctx.clearRect(0,0,W,H);
+      const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'rgba(5,5,6,0.9)'); g.addColorStop(1,'rgba(5,7,10,0.98)'); ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+      // streaks
+      for(let s of streaks){s.x += s.spd; if(s.x>W+800) s.x=-1200; const lg = ctx.createLinearGradient(s.x,s.y,s.x+s.w,s.y); lg.addColorStop(0, `rgba(244,209,138,${s.a})`); lg.addColorStop(0.5, `rgba(255,245,220,${s.a*0.95})`); lg.addColorStop(1, `rgba(244,209,138,${s.a})`); ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.tilt); ctx.fillStyle=lg; ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h); ctx.restore(); }
+      // particles + connect
+      for(let p of parts){p.x += p.vx; p.y -= p.vy; if(p.x<-10) p.x=W+10; if(p.x>W+10) p.x=-10; if(p.y<-10) p.y=H+10; if(p.y>H+10) p.y=-10; ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.alpha})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
       requestAnimationFrame(render);
     }
     render();
 
-    // Cursor aura
-    const aura = document.getElementById('cursorAura');
-    document.addEventListener('mousemove', (e)=>{
-      aura.style.opacity = 1;
-      aura.style.left = e.clientX + 'px';
-      aura.style.top = e.clientY + 'px';
-    });
-    document.addEventListener('mouseleave', ()=>{ aura.style.opacity = 0; });
+    // cursor aura
+    const aura = document.getElementById('aura'); document.addEventListener('mousemove', e=>{aura.style.opacity=1; aura.style.left=e.clientX+'px'; aura.style.top=e.clientY+'px';}); document.addEventListener('mouseleave', ()=>aura.style.opacity=0);
 
-    // GSAP-driven animations and scroll interactions
-    function initAnimations(){
-      // ensure plugin registered
+    // GSAP animations
+    function init(){ if(typeof gsap === 'undefined'){ document.getElementById('loader').style.display='none'; return; }
       gsap.registerPlugin(ScrollTrigger);
+      // loader timeline
+      const logo = document.getElementById('logoCenter'); const loader = document.getElementById('loader');
+      const tl = gsap.timeline({onComplete:()=>{ // fade loader
+        gsap.to(loader,{opacity:0,duration:0.8,onComplete:()=>loader.style.display='none'});
+      }});
+      tl.from(logo,{scale:0.6,opacity:0,duration:0.8,ease:'back.out(1.4)'});
+      tl.from('.loader-sub',{y:8,opacity:0,duration:0.6},'-=0.35');
+      tl.to(logo,{scale:1.04,duration:0.5,repeat:1,yoyo:true,ease:'sine.inOut'},'+=0.1');
 
-      // loader reveal -> burst particles effect
-      const logo = document.getElementById('srLogo');
-      const sub = document.getElementById('loaderSub');
+      // entrance
+      gsap.from('.logo',{opacity:0,y:-16,duration:0.8,delay:0.9});
+      gsap.from('.hero-left',{opacity:0,y:26,duration:1,delay:1});
+      gsap.from('.profile',{opacity:0,y:26,duration:1,delay:1.1});
 
-      // initial loader timeline
-      const tl = gsap.timeline({
-        onComplete: ()=> {
-          // burst tiny canvas particles from center to feel like SR formed then spread
-          burstParticles();
-          gsap.to('#loader',{opacity:0,duration:0.9,delay:0.45,onComplete:()=>{ hideLoaderImmediate(); }});
-        }
-      });
-      tl.to(logo, {opacity:1, y:-6, duration:0.9, ease:'power3.out'});
-      tl.to(sub, {opacity:1, duration:0.6}, "-=0.3");
-      tl.to(logo, {scale:1.05, duration:0.55, repeat:1, yoyo:true, ease:'sine.inOut'}, "+=0.12");
+      // floating pills
+      gsap.to('.pill',{y:-6,repeat:-1,yoyo:true,duration:2.4,stagger:0.12,ease:'sine.inOut',delay:1.6});
 
-      // entrance animations for header + hero
-      gsap.from('.logo-box', {y:-20, opacity:0, duration:0.8, delay:1.3});
-      gsap.from('.hero-card', {y:30, opacity:0, duration:0.9, delay:1.5});
-      gsap.from('.profile', {y:30, opacity:0, duration:0.9, delay:1.6});
-
-      // hero badges subtle float
-      gsap.to('.badge', {y:-6, repeat:-1, yoyo:true, duration:2.4, stagger:0.16, ease:'sine.inOut', delay:2.2});
-
-      // profile parallax on mouse
-      const pf = document.getElementById('pfImg');
-      const profile = document.querySelector('.profile');
-      profile.addEventListener('mousemove', (e)=>{
-        const r = profile.getBoundingClientRect();
-        const dx = (e.clientX - r.left - r.width/2) / 30;
-        const dy = (e.clientY - r.top - r.height/2) / 30;
-        gsap.to(pf, {x:dx, y:dy, duration:0.8, ease:'power3.out'});
-      });
-      profile.addEventListener('mouseleave', ()=> gsap.to(pf, {x:0,y:0,duration:0.8,ease:'power3.out'}));
-
-      // scroll-triggered reveals
-      gsap.utils.toArray('section').forEach((sec, i) => {
-        gsap.from(sec, {
-          opacity: 0, y: 50, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: sec, start: 'top 85%' , toggleActions: 'play none none none' },
-          delay: i*0.06
-        });
+      // shimmer entrance on cards
+      gsap.utils.toArray('.card').forEach((c,i)=>{
+        gsap.from(c,{opacity:0,y:26,duration:0.9,delay:1.2 + i*0.08, ease:'power3.out', scrollTrigger:{trigger:c, start:'top 90%'}});
       });
 
-      // card hover glows
-      document.querySelectorAll('.card').forEach(c => {
-        c.addEventListener('mouseenter', ()=> {
-          gsap.to(c, {boxShadow: '0 30px 80px rgba(242,216,139,0.12)', y:-8, duration:0.36});
-        });
-        c.addEventListener('mouseleave', ()=> {
-          gsap.to(c, {boxShadow: '0 0 0 rgba(0,0,0,0)', y:0, duration:0.36});
-        });
+      // skill bars animation when visible
+      gsap.utils.toArray('.bar i').forEach((bar)=>{
+        const w = bar.style.width || '70%'; bar.style.width='0%';
+        ScrollTrigger.create({trigger:bar, start:'top 85%', onEnter:()=>gsap.to(bar,{width:w,duration:1.6,ease:'power3.out'})});
       });
 
-      // nav links smooth scrolling
-      document.querySelectorAll('nav a').forEach(a => {
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          const id = a.getAttribute('href').slice(1);
-          document.getElementById(id).scrollIntoView({behavior:'smooth'});
-        });
-      });
+      // profile parallax
+      const pf = document.getElementById('pf'); const box = document.querySelector('.profile');
+      box.addEventListener('mousemove', e=>{ const r = box.getBoundingClientRect(); const dx = (e.clientX - r.left - r.width/2)/30; const dy = (e.clientY - r.top - r.height/2)/30; gsap.to(pf,{x:dx,y:dy,duration:0.6,ease:'power3.out'}); });
+      box.addEventListener('mouseleave', ()=> gsap.to(pf,{x:0,y:0,duration:0.8,ease:'power3.out'}));
 
-      // Hire & CV buttons
-      document.getElementById('hireBtn').addEventListener('click', ()=> {
-        document.getElementById('contact').scrollIntoView({behavior:'smooth'});
-        gsap.fromTo('#contact', {y:20,opacity:0}, {y:0,opacity:1,duration:0.6});
-      });
-      document.getElementById('cvBtn').addEventListener('click', ()=> {
-        // simulated download - you can point to real file URL
-        const a = document.createElement('a'); a.href='#'; a.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(a); a.click(); a.remove();
-        gsap.fromTo('#cvBtn', {scale:1}, {scale:1.06, duration:0.18, yoyo:true, repeat:1});
-      });
+      // hover glows on cards
+      document.querySelectorAll('.card').forEach(c=>{ c.addEventListener('mouseenter', ()=> gsap.to(c,{y:-10,boxShadow:'0 40px 120px rgba(244,209,138,0.06)',duration:0.32})); c.addEventListener('mouseleave', ()=> gsap.to(c,{y:0,boxShadow:'0 0 0 rgba(0,0,0,0)',duration:0.32})); });
 
-      // contact form send animation
-      const form = document.getElementById('contactForm');
-      form.addEventListener('submit', (e)=> {
-        e.preventDefault();
-        const btn = form.querySelector('button');
-        btn.disabled = true;
-        const original = btn.innerText;
-        btn.innerText = 'Sending...';
-        gsap.to(btn, {scale:0.98, duration:0.12});
-        setTimeout(()=> {
-          btn.innerText = 'Sent ✓';
-          gsap.to(btn, {scale:1.02, duration:0.18});
-          setTimeout(()=>{ btn.disabled=false; btn.innerText=original; form.reset(); }, 1400);
-        }, 900);
-      });
-    } // end initAnimations
+      // nav scroll smooth
+      document.querySelectorAll('nav a').forEach(a=>{ a.addEventListener('click', e=>{ e.preventDefault(); const id=a.getAttribute('href').slice(1); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }); });
 
-    // A small burst particle animation (center) when loader finishes
-    function burstParticles(){
-      const count = 36;
-      const burst = [];
-      for(let i=0;i<count;i++){
-        burst.push({
-          x: window.innerWidth/2 + (Math.random()-0.5)*40,
-          y: window.innerHeight/2 + (Math.random()-0.5)*20,
-          vx: (Math.random()-0.5)*6,
-          vy: (Math.random()-0.8)*6,
-          r: Math.random()*3 + 1,
-          a: 1
-        });
-      }
-      let t = 0;
-      function step(){
-        ctx.save();
-        for(let b of burst){
-          b.x += b.vx; b.y += b.vy; b.vx *= 0.96; b.vy *= 0.98; b.a -= 0.02;
-          ctx.beginPath();
-          ctx.fillStyle = `rgba(242,216,139,${Math.max(b.a,0)})`;
-          ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill();
-        }
-        ctx.restore();
-        t++;
-        if(t<60) requestAnimationFrame(step);
-      }
-      step();
+      // buttons
+      document.getElementById('hireBtn').addEventListener('click', ()=>{ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); });
+      document.getElementById('cvBtn').addEventListener('click', ()=>{ const link = document.createElement('a'); link.href='#'; link.download='Shubham_Raj_Sharma_CV.pdf'; document.body.appendChild(link); link.click(); link.remove(); gsap.fromTo('#cvBtn',{scale:1},{scale:1.06,duration:0.12,yoyo:true,repeat:1}); });
+
+      // contact form animation
+      const form = document.getElementById('contactForm'); form.addEventListener('submit', e=>{ e.preventDefault(); const btn = form.querySelector('button'); btn.disabled=true; const original = btn.innerText; btn.innerText='Sending...'; gsap.to(btn,{scale:0.96,duration:0.12}); setTimeout(()=>{ btn.innerText='Sent ✓'; gsap.to(btn,{scale:1.02,duration:0.18}); setTimeout(()=>{ btn.disabled=false; btn.innerText=original; form.reset(); },1300); },900); });
     }
 
-    // Wait until GSAP is ready; if not loaded, still run minimal init
-    function safeInit(){
-      try {
-        if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined'){
-          initAnimations();
-        } else {
-          // quick fallback: simple fadeout loader if GSAP missing
-          console.warn('GSAP not available — running fallback animations.');
-          setTimeout(hideLoaderImmediate, 800);
-        }
-      } catch(e){
-        console.error(e);
-        hideLoaderImmediate();
-      }
-    }
-
-    // hide loader after GSAP-based timeline finishes (if GSAP loaded)
-    // call safeInit on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', ()=> {
-      // tiny entrance to show loader logo even before GSAP timeline
-      const logoEl = document.getElementById('srLogo'), sub = document.getElementById('loaderSub');
-      logoEl.style.opacity = 1; logoEl.style.transform = 'translateY(0)';
-      sub.style.opacity = 1;
-      // Give a short delay then initialize GSAP (or fallback)
-      setTimeout(safeInit, 320);
-    });
-
-    // Ensure loader hidden if everything fails
-    setTimeout(hideLoaderImmediate, 6000);
-
-    // Prevent the page from staying black if image missing - fallback image
-    document.getElementById('pfImg').addEventListener('error', (e) => {
-      e.target.src = 'https://via.placeholder.com/900x600/0b0b0b/f2d88b?text=Shubham+Raj+Sharma';
-    });
+    // ensure init runs
+    window.addEventListener('load', ()=>{ setTimeout(init,140); setTimeout(()=>{ const l=document.getElementById('loader'); if(l) l.style.display='none'; },5000); });
   </script>
 </body>
 </html>
